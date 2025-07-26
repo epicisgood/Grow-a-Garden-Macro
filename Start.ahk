@@ -1157,13 +1157,31 @@ BuyEvent(){
     Sleep(200)
     Click
     Sleep(1500)
+
+    ; Move down from gear shop as there is a new tree in the way.
+    Send("{s Down}")
+    HyperSleep(1200)
+    Send("{s Up}")
+
     Send("{" Dkey " down}")
-    HyperSleep(9500)
+    HyperSleep(10000)
     Send("{" Dkey " up}")
     Sleep(500)
     Send("{" Wkey " down}")
-    HyperSleep(300)
+
+    HyperSleep(1500)
     Send("{" Wkey " up}")
+
+    Sleep(500)
+    Send("{" Dkey " down}")
+    HyperSleep(500)
+    Send("{" Dkey " up}")
+
+    Sleep(500)
+    Send("{" WKey " down}")
+    HyperSleep(100)
+    Send("{" WKey " up}")
+
     Sleep(1500)
     Send("{" Ekey "}")
     clickOption(1,5)
@@ -1174,7 +1192,6 @@ BuyEvent(){
     CloseClutter()
     return 1
 }
-
 
 
 
