@@ -780,12 +780,10 @@ clickOption(option, optionamount){
     switch optionamount {
         case 3: 
             if (option == 1){
-                MouseMove windowWidth * (1500 / 1920), windowHeight * (390 / 1080)
-            } else if (option == 2){
                 MouseMove windowWidth * (1500 / 1920), windowHeight * (570 / 1080)
-            } else if (option == 3){
+            } else if (option == 2){
                 MouseMove windowWidth * (1500 / 1920), windowHeight * (770 / 1080)
-            }      
+            }   
         case 4:
             if (option == 1){
                 MouseMove windowWidth * (1500 / 1920), windowHeight * (390 / 1080)
