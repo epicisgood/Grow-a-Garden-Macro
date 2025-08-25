@@ -3,9 +3,9 @@ nowUnix() {
 }
 
 
-; LastSeedsTime := nowUnix()
-; LastGearsTime := nowUnix()
-; LastEggsTime := nowUnix()
+LastSeedsTime := nowUnix()
+LastGearsTime := nowUnix()
+LastEggsTime := nowUnix()
 
 LastGearCraftingTime := nowUnix()
 LastSeedCraftingTime := nowUnix()
@@ -24,9 +24,7 @@ FourHours(){
 }
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime
-    ; LastSeedsTime, LastGearsTime, LastEggsTime
-
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastSeedsTime, LastGearsTime, LastEggsTime
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
     Rewardlist := []
@@ -34,15 +32,13 @@ RewardChecker() {
     currentTime := nowUnix()
 
     if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
-        ; LastSeedsTime := currentTime
+        LastSeedsTime := currentTime
+        LastGearsTime := currentTime
         Rewardlist.Push("Seeds")
-    }
-    if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
-        ; LastGearsTime := currentTime
         Rewardlist.Push("Gears")
     }
     if (Mod(A_Min,30) == 0) {
-        ; LastEggsTime := currentTime
+        LastEggsTime := currentTime
         Rewardlist.Push("Eggs")
     }
     ; if (A_Min == 0) {

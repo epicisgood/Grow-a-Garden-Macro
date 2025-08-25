@@ -734,15 +734,15 @@ buyShop(itemList, itemType, crafting := false){
                 Send("{WheelUp}")
                 Sleep 20
             }
-            Sleep(200)
+            Sleep(250)
             Click
-            Sleep(200)
+            Sleep(250)
             Loop 12 {
                 Send("{WheelUp}")
                 Sleep 20
             }
             relativeMouseMove(0.5,0.4)
-            Sleep(200)
+            Sleep(250)
         } else {
             relativeMouseMove(0.4,pos)
         }
@@ -1278,11 +1278,10 @@ MainLoop() {
 }
 
 
-
 ShowToolTip(){
-    ; global LastSeedsTime
-    ; global LastGearsTime
-    ; global LastEggsTime
+    global LastSeedsTime
+    global LastGearsTime
+    global LastEggsTime
 
     global LastGearCraftingTime
     global LastSeedCraftingTime
@@ -1303,36 +1302,23 @@ ShowToolTip(){
     currentTime := nowUnix()
 
     tooltipText := ""
-    shopR := Mod(300 - Mod(A_Min*60 + A_Sec, 300), 300)
-    eggR := Mod(1800 - Mod(A_Min*60 + A_Sec, 1800), 1800)
-
-    tooltipText := ""
     if (SeedsEnabled) {
-        tooltipText .= "Seeds: " shopR//60 ":" Format("{:02}", Mod(shopR, 60)) "`n"
+        static SeedTime := 300
+        SeedRemaining := Max(0, SeedTime - (currentTime - LastSeedsTime))
+        tooltipText .= "Seeds: " (SeedRemaining // 60) ":" Format("{:02}", Mod(SeedRemaining, 60)) "`n"
     }
+
     if (GearsEnabled) {
-        tooltipText .= "Gears: " shopR//60 ":" Format("{:02}", Mod(shopR, 60)) "`n"
+        static GearTime := 300
+        GearRemaining := Max(0, GearTime - (currentTime - LastGearsTime))
+        tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
+
     if (EggsEnabled) {
-        tooltipText .= "Eggs: " eggR//60 ":" Format("{:02}", Mod(eggR, 60)) "`n"
+        static EggTime := 1800
+        EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
+        tooltipText .= "Eggs: " (EggRemaining // 60) ":" Format("{:02}", Mod(EggRemaining, 60)) "`n"
     }
-    ; if (SeedsEnabled) {
-    ;     static SeedTime := 300
-    ;     SeedRemaining := Max(0, SeedTime - (currentTime - LastSeedsTime))
-    ;     tooltipText .= "Seeds: " (SeedRemaining // 60) ":" Format("{:02}", Mod(SeedRemaining, 60)) "`n"
-    ; }
-
-    ; if (GearsEnabled) {
-    ;     static GearTime := 300
-    ;     GearRemaining := Max(0, GearTime - (currentTime - LastGearsTime))
-    ;     tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
-    ; }
-
-    ; if (EggsEnabled) {
-    ;     static EggTime := 1800
-    ;     EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
-    ;     tooltipText .= "Eggs: " (EggRemaining // 60) ":" Format("{:02}", Mod(EggRemaining, 60)) "`n"
-    ; }
     if (CookingEnabled) {
         static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
         CookingRemaining := Max(0, CookingTime - (currentTime - LastCookingTime))
