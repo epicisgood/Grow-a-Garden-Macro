@@ -3,11 +3,15 @@ nowUnix() {
 }
 
 
+; LastSeedsTime := nowUnix()
+; LastGearsTime := nowUnix()
+; LastEggsTime := nowUnix()
+
 LastGearCraftingTime := nowUnix()
 LastSeedCraftingTime := nowUnix()
 LastEventCraftingtime := nowUnix()
-
 LastCookingTime := nowUnix()
+
 
 FourHours(){
     UtcNow := A_NowUTC
@@ -19,9 +23,9 @@ FourHours(){
 
 }
 
-
 RewardChecker() {
     global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime
+    ; LastSeedsTime, LastGearsTime, LastEggsTime
 
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
@@ -29,41 +33,35 @@ RewardChecker() {
 
     currentTime := nowUnix()
 
-    if (Mod(A_Min,5) == 0) {
+    if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
+        ; LastSeedsTime := currentTime
         Rewardlist.Push("Seeds")
     }
-    if (Mod(A_Min,5) == 0) {
+    if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
+        ; LastGearsTime := currentTime
         Rewardlist.Push("Gears")
     }
     if (Mod(A_Min,30) == 0) {
+        ; LastEggsTime := currentTime
         Rewardlist.Push("Eggs")
     }
     ; if (A_Min == 0) {
     ;     Rewardlist.Push("Event")
     ; }
-    if (FourHours() && CheckSetting("Settings", "Cosmetics")) {
+    if (FourHours()) {
         Rewardlist.Push("Cosmetics")
     }
-    if (FourHours() && CheckSetting("Settings", "TravelingMerchant")) {
+    if (FourHours()) {
         Rewardlist.Push("TravelingMerchant")
     }
-    if (currentTime - LastGearCraftingTime >= GearCraftingTime && CheckSetting("GearCrafting", "GearCrafting")) {
-        if !(A_Min == 4 || A_Min == 9) {
-            Rewardlist.Push("GearCrafting")
-        }
-        
+    if (currentTime - LastGearCraftingTime >= GearCraftingTime) {
+        Rewardlist.Push("GearCrafting")
     }
-    if (currentTime - LastSeedCraftingTime >= SeedCraftingTime && CheckSetting("SeedCrafting", "SeedCrafting")) {
-        if !(A_Min == 4 || A_Min == 9) {
-            Rewardlist.Push("SeedCrafting")
-        }
-        
+    if (currentTime - LastSeedCraftingTime >= SeedCraftingTime) {
+        Rewardlist.Push("SeedCrafting")   
     }
-    if (currentTime - LastCookingTime >= CookingTime && CheckSetting("Settings", "CookingEvent")) {
-        if !(A_Min == 4 || A_Min == 9) {
-            Rewardlist.Push("Cooking")
-        }
-        
+    if (currentTime - LastCookingTime >= CookingTime) {
+        Rewardlist.Push("Cooking")
     }
 
     return Rewardlist
@@ -77,10 +75,6 @@ RewardInterupt() {
     for (k, v in variable) {
         ToolTip("")
         ActivateRoblox()
-        if (A_index == 1) {
-            CameraCorrection()
-        }
-        
         if (v = "Seeds") {
             BuySeeds()
         }
@@ -120,14 +114,6 @@ RewardInterupt() {
     }
     
     if (variable.Length > 0) {
-        if (Mod(A_Min,5) == 0){
-            thing := 60 - A_Sec 
-            loop thing {
-                ShowToolTip()
-                Sleep(1000)
-            }
-
-        }
         Clickbutton("Garden")
         relativeMouseMove(0.5, 0.5)
         return 1

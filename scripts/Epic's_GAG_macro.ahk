@@ -567,9 +567,6 @@ CameraCorrection(){
         equipRecall()
         Sleep(500)
     }
-    Send("{o down}")
-    Sleep 250
-    Send("{o up}")
     Clickbutton("Garden")
     CloseClutter()
     Sleep(300)
@@ -688,7 +685,7 @@ CheckStock(index, list, crafting := false){
         x := Cords[1] + captureX - 5
         y := Cords[2] + captureY - 10
         MouseMove(x, y)
-        Sleep(100)
+        Sleep(25)
         Click
         Gdip_DisposeImage(pBMScreen)
     } else {
@@ -737,32 +734,32 @@ buyShop(itemList, itemType, crafting := false){
                 Send("{WheelUp}")
                 Sleep 20
             }
-            Sleep(250)
+            Sleep(200)
             Click
-            Sleep(250)
+            Sleep(200)
             Loop 12 {
                 Send("{WheelUp}")
                 Sleep 20
             }
             relativeMouseMove(0.5,0.4)
-            Sleep(250)
+            Sleep(200)
         } else {
             relativeMouseMove(0.4,pos)
         }
-        if (A_index >= 19){
+        if (A_index >= 18){
             if ((A_Index - 19) / 8 == 0.5){
                 ScrollDown(0.75)
-                Sleep(500)
+                Sleep(250)
             } else {
                 ScrollDown(0.25  + (A_Index - 19) / 8)
-                Sleep(500)
+                Sleep(250)
             }
         }
         Click
         Sleep(350)
         if (A_Index >= 23) {
             ScrollDown(0.25)
-            Sleep(350)
+            Sleep(250)
         }
         if (CheckSetting(itemType, StrReplace(item, " ", ""))){
             CheckStock(A_Index, itemlist, crafting)
@@ -976,7 +973,6 @@ BuyGears(){
         Click
         Sleep(1500)
         Send("{" Ekey "}")
-        clickOption(1,2)
         if !DetectShop("gear"){
             CameraCorrection()
             continue
@@ -1184,8 +1180,9 @@ BuyMerchant(){
     merchantItems := [
         "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant",
         "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant",
-        "TravelingMerchant", "TravelingMerchant"
+        "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant", "TravelingMerchant"
     ]
+
     DetectOnett()
     if DetectShop("traveling merchant"){
         buyShop(merchantItems, "Settings")
@@ -1247,23 +1244,23 @@ MainLoop() {
         return
     }
 
-    MyWindow.Destroy()
-    CloseChat() 
-    equipRecall()
-    CameraCorrection()
-    CookingEvent()
-    BuySeeds()
-    BuyGears()
-    BuyEggs()
-    ; BuyEvent()
-    BuyCosmetics()
-    global LastCookingTime := nowUnix()
-    GearCraft()
-    global LastGearCraftingTime := nowUnix()
-    SeedCraft()
-    global LastSeedCraftingTime := nowUnix()
-    BuyMerchant()
-    global LastEventCraftingtime := nowUnix()
+    ; MyWindow.Destroy()
+    ; CloseChat() 
+    ; equipRecall()
+    ; CameraCorrection()
+    ; CookingEvent()
+    ; BuySeeds()
+    ; BuyGears()
+    ; BuyEggs()
+    ; ; BuyEvent()
+    ; BuyCosmetics()
+    ; global LastCookingTime := nowUnix()
+    ; GearCraft()
+    ; global LastGearCraftingTime := nowUnix()
+    ; SeedCraft()
+    ; global LastSeedCraftingTime := nowUnix()
+    ; BuyMerchant()
+    ; global LastEventCraftingtime := nowUnix()
     loop {
         RewardInterupt()
         if (Disconnect()){
@@ -1280,10 +1277,16 @@ MainLoop() {
     
 }
 
+
+
 ShowToolTip(){
-    global GearCraftingTime
+    ; global LastSeedsTime
+    ; global LastGearsTime
+    ; global LastEggsTime
+
     global LastGearCraftingTime
     global LastSeedCraftingTime
+    global GearCraftingTime
     global SeedCraftingTime
     global LastCookingTime
 
@@ -1298,6 +1301,8 @@ ShowToolTip(){
 
 
     currentTime := nowUnix()
+
+    tooltipText := ""
     shopR := Mod(300 - Mod(A_Min*60 + A_Sec, 300), 300)
     eggR := Mod(1800 - Mod(A_Min*60 + A_Sec, 1800), 1800)
 
@@ -1311,6 +1316,23 @@ ShowToolTip(){
     if (EggsEnabled) {
         tooltipText .= "Eggs: " eggR//60 ":" Format("{:02}", Mod(eggR, 60)) "`n"
     }
+    ; if (SeedsEnabled) {
+    ;     static SeedTime := 300
+    ;     SeedRemaining := Max(0, SeedTime - (currentTime - LastSeedsTime))
+    ;     tooltipText .= "Seeds: " (SeedRemaining // 60) ":" Format("{:02}", Mod(SeedRemaining, 60)) "`n"
+    ; }
+
+    ; if (GearsEnabled) {
+    ;     static GearTime := 300
+    ;     GearRemaining := Max(0, GearTime - (currentTime - LastGearsTime))
+    ;     tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
+    ; }
+
+    ; if (EggsEnabled) {
+    ;     static EggTime := 1800
+    ;     EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
+    ;     tooltipText .= "Eggs: " (EggRemaining // 60) ":" Format("{:02}", Mod(EggRemaining, 60)) "`n"
+    ; }
     if (CookingEnabled) {
         static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
         CookingRemaining := Max(0, CookingTime - (currentTime - LastCookingTime))
@@ -1380,6 +1402,9 @@ F3::
     ; pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
     ; Gdip_SaveBitmapToFile(pBMScreen,"ss.png")
     ; Gdip_DisposeImage(pBMScreen)
+
+    ; BuyGears()
+    BuySeeds()
     PauseMacro()
 }
 

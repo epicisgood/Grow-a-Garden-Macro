@@ -1,7 +1,7 @@
 
 #Requires AutoHotkey v2.0
 
-version := "v1.1.8"
+version := "v1.1.9"
 settingsFile := "settings.ini"
 
 
@@ -37,6 +37,10 @@ F1::{
 }
 
 F2::{
+    ResetMacro
+}
+
+Alt & S:: {
     ResetMacro
 }
 
@@ -104,11 +108,10 @@ if (WinExist("Roblox ahk_exe ApplicationFrameHost.exe")){
 
 
 
-
 WebButtonClickEvent(button) {
-	switch button {
-		case "Start":
-			Send("{F1}")
+    switch button {
+        case "Start":
+            Send("{F1}")
         case "Stop":
 			Send("{F2}")
 	}
