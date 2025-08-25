@@ -36,7 +36,7 @@ A macro for **Grow a Garden** that automatically buys your selected seeds, gear,
 | ----------- | --- |
 | Start Macro | F1  |
 | Stop Macro  | F2  |
-| Stop Macro | ``Alt`` + ``S``  |
+| Stop Macro | ``Alt`` ``S``  |
 | Pause Macro | F3  |
 
 ---
