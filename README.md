@@ -4,11 +4,11 @@ A macro for **Grow a Garden** that automatically buys your selected seeds, gear,
 
 ✅ Supports **auto-reconnect** and sends **images via Discord webhook**.
 
-✅ The macro does NOT require **UI navigation** and the macro works using your cursor.
+✅ The macro does NOT require **UI navigation** and the macro works using your **cursor**.
 
 > **Recall Wrench** is in the **first hotbar slot** but macro auto equips it
 
-<img width="500" height="400" alt="image" src="https://github.com/user-attachments/assets/fa1e1de8-ad75-4a77-b1e9-187d6526a51e" />
+<img width="450" height="500" alt="macro gui" src="https://github.com/user-attachments/assets/b202dd21-72db-48c3-a641-b282c27a9803" />
 
 ---
 
@@ -36,14 +36,10 @@ A macro for **Grow a Garden** that automatically buys your selected seeds, gear,
 | ----------- | --- |
 | Start Macro | F1  |
 | Stop Macro  | F2  |
+| Pause Macro | F3  |
+| Stop Macro | ``Alt`` + ``S``  |
 
 ---
-
-## 📦 Macro Setup
-
-> ⚙️ **Font styling**:
-> Ensure your font is default and if its not then it will not detect items in your inventory.
-
 
 
 ## 📬 Contact
