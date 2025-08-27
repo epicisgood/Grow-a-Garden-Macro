@@ -928,6 +928,37 @@ getItems(item){
     ; return jsonData[item]
 }
 
+initShops(){
+    static Shopinit := true
+    static Egginit := true
+    static Fourinit := true
+    if (Shopinit == true){
+        if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
+            global LastShopTime := nowUnix()
+            BuySeeds()
+            BuyGears()
+            Shopinit := false
+        }
+    } else if (Egginit == true){
+        if (A_Min == 34 || A_Min == 4) {
+            global LastEggsTime := nowUnix()
+            BuyEggs()
+            Egginit := false
+        }
+    } else if (Fourinit == true){
+        UtcNow := A_NowUTC
+        UtcHour := FormatTime(UtcNow, "H")
+        if (Mod(UtcHour, 4) == 0 && A_min < 5) {
+            global LastFourHours := nowUnix()
+            BuyMerchant()
+            BuyCosmetics()
+            Fourinit := false
+        }
+    }
+
+
+}
+
 BuySeeds(){
     seedItems := getItems("Seeds")
     if !(CheckSetting("Seeds", "Seeds")){
@@ -1262,12 +1293,21 @@ MainLoop() {
     BuyMerchant()
     global LastEventCraftingtime := nowUnix()
     loop {
-        RewardInterupt()
-        if (Disconnect()){
-            Sleep(1500)
-            equipRecall()
-            Sleep(500)
+        initShops()
+        
+        if (((Mod(A_Min, 10) = 2 || Mod(A_Min, 10) = 7)) && A_Sec == 30) {
             CameraCorrection()
+        }
+        if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
+            RewardInterupt()
+        }
+        if (Mod(A_Index, 30) == 0){
+            if (Disconnect()){
+                Sleep(1500)
+                equipRecall()
+                Sleep(500)
+                CameraCorrection()
+            }
         }
         ShowToolTip()
         Sleep(1000)
@@ -1279,8 +1319,7 @@ MainLoop() {
 
 
 ShowToolTip(){
-    global LastSeedsTime
-    global LastGearsTime
+    global LastShopTime
     global LastEggsTime
 
     global LastGearCraftingTime
@@ -1304,13 +1343,13 @@ ShowToolTip(){
     tooltipText := ""
     if (SeedsEnabled) {
         static SeedTime := 300
-        SeedRemaining := Max(0, SeedTime - (currentTime - LastSeedsTime))
+        SeedRemaining := Max(0, SeedTime - (currentTime - LastShopTime))
         tooltipText .= "Seeds: " (SeedRemaining // 60) ":" Format("{:02}", Mod(SeedRemaining, 60)) "`n"
     }
 
     if (GearsEnabled) {
         static GearTime := 300
-        GearRemaining := Max(0, GearTime - (currentTime - LastGearsTime))
+        GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
 
@@ -1358,7 +1397,6 @@ ShowToolTip(){
 
         tooltipText .= "Merchant: " merchantH ":" Format("{:02}", merchantM) ":" Format("{:02}", merchantS) "`n"
     }
-
     if (gearCraftingEnabled) {
         gearCraftRemaining := Max(0, GearCraftingTime - (currentTime - LastGearCraftingTime))
         gearM := gearCraftRemaining // 60

@@ -3,8 +3,7 @@ nowUnix() {
 }
 
 
-LastSeedsTime := nowUnix()
-LastGearsTime := nowUnix()
+LastShopTime := nowUnix()
 LastEggsTime := nowUnix()
 
 LastGearCraftingTime := nowUnix()
@@ -12,42 +11,33 @@ LastSeedCraftingTime := nowUnix()
 LastEventCraftingtime := nowUnix()
 LastCookingTime := nowUnix()
 
-
-FourHours(){
-    UtcNow := A_NowUTC
-    UtcHour := FormatTime(UtcNow, "H")
-    if (Mod(UtcHour, 4) == 0 && A_min == 0) {
-        return true
-    } 
-    return false
-
-}
+LastFourHours := nowUnix()
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastSeedsTime, LastGearsTime, LastEggsTime
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastEggsTime, LastFourHours
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
     Rewardlist := []
 
     currentTime := nowUnix()
 
-    if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
-        LastSeedsTime := currentTime
-        LastGearsTime := currentTime
+
+    if (currentTime - LastShopTime >= 300) {
+        LastShopTime := currentTime
         Rewardlist.Push("Seeds")
         Rewardlist.Push("Gears")
     }
-    if (Mod(A_Min,30) == 0) {
+    if (currentTime - LastEggsTime >= 1800) {
         LastEggsTime := currentTime
         Rewardlist.Push("Eggs")
     }
     ; if (A_Min == 0) {
     ;     Rewardlist.Push("Event")
     ; }
-    if (FourHours()) {
+    if (currentTime - LastFourHours >= 14400) {
         Rewardlist.Push("Cosmetics")
     }
-    if (FourHours()) {
+    if (currentTime - LastFourHours >= 14400) {
         Rewardlist.Push("TravelingMerchant")
     }
     if (currentTime - LastGearCraftingTime >= GearCraftingTime) {
