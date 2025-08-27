@@ -35,9 +35,8 @@ RewardChecker() {
     ;     Rewardlist.Push("Event")
     ; }
     if (currentTime - LastFourHours >= 14400) {
+        LastFourHours := currentTime
         Rewardlist.Push("Cosmetics")
-    }
-    if (currentTime - LastFourHours >= 14400) {
         Rewardlist.Push("TravelingMerchant")
     }
     if (currentTime - LastGearCraftingTime >= GearCraftingTime) {
