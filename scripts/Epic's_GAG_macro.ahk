@@ -305,12 +305,12 @@ clickItem(keyword, searchbitmap){
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
     Sleep(500)
-    capX := windowX
-    capY := windowY + 200 + windowHeight - 600
-    capW := windowWidth
-    capH := windowHeight - (200 + windowHeight - 600)
-    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
     if (searchbitmap == "Bracket"){
+        capX := windowX
+        capY := windowY + 200 + windowHeight - 600
+        capW := windowWidth
+        capH := windowHeight - (400 + windowHeight - 600)
+        pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
         if (Gdip_ImageSearch(pBMScreen, bitmaps["Bracket2"], &OutputList, , , , , 20) = 1) {
             Cords := StrSplit(OutputList, ",")
             x := Cords[1] + capX + 4
@@ -323,7 +323,13 @@ clickItem(keyword, searchbitmap){
             closeBag()
             return true
         }
+        Gdip_DisposeImage(pBMScreen)
     }
+    capX := windowX
+    capY := windowY + 200 + windowHeight - 600
+    capW := windowWidth
+    capH := windowHeight - (200 + windowHeight - 600)
+    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
 
     if (Gdip_ImageSearch(pBMScreen, bitmaps[searchbitmap], &OutputList, , , , , 20) = 1) {
         Cords := StrSplit(OutputList, ",")
@@ -334,7 +340,9 @@ clickItem(keyword, searchbitmap){
         Click
         Sleep(250)
         Gdip_DisposeImage(pBMScreen)
-        closeBag()
+        if !(searchbitmap == "Recall Wrench"){
+            closeBag()
+        }
         return true
     } else {
         PlayerStatus("Missing " keyword " in inventory!", "0xff0000")
@@ -370,7 +378,7 @@ equipRecall(){
     searchItem("recall")
 
     pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY "|" windowWidth "|" windowHeight )
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["Recall"] , &OutputList, , , , , 25) = 1) {
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["Recall Wrench"] , &OutputList, , , , , 25) = 1) {
         Cords := StrSplit(OutputList, ",")
         x := Cords[1] + windowX
         y := Cords[2] + windowY
@@ -661,6 +669,7 @@ Crafting(Recipeitems, settingName, Names){
             Send("1")
             Sleep(250)
             Send("1")
+            CloseClutter()
             PlayerStatus("Crafting " item.Name "!", "0x22e6a8",,false)
             return Integer(item.CraftTime * 1.1)
         }
@@ -897,9 +906,9 @@ CloseShop(crafting := false){
 
 CloseClutter(){
     Clickbutton("Xbutton")
-    Sleep(100)
+    Sleep(200)
     Clickbutton("Robux")
-    Sleep(300)
+    Sleep(100)
 }
 
 getItems(item){
@@ -931,7 +940,8 @@ getItems(item){
 initShops(){
     static Shopinit := true
     static Egginit := true
-    static Fourinit := true
+    static Merchantinit := true
+    static Cosemticinit := true
     if (Shopinit == true){
         if ((Mod(A_Min, 10) = 3 || Mod(A_Min, 10) = 8)) {
             global LastShopTime := nowUnix()
@@ -940,19 +950,24 @@ initShops(){
             Shopinit := false
         }
     } else if (Egginit == true){
-        if (A_Min == 34 || A_Min == 4) {
+        if (A_Min == 22 || A_Min == 52) {
             global LastEggsTime := nowUnix()
             BuyEggs()
             Egginit := false
         }
-    } else if (Fourinit == true){
+    } else if (Merchantinit == true){
+        if (A_min < 5) {
+            global LastMerchantTime := nowUnix()
+            BuyMerchant()
+            Merchantinit := false
+        }
+    } else if (Cosemticinit == true){
         UtcNow := A_NowUTC
         UtcHour := FormatTime(UtcNow, "H")
         if (Mod(UtcHour, 4) == 0 && A_min < 5) {
-            global LastFourHours := nowUnix()
-            BuyMerchant()
+            global LastCosmetics := nowUnix()
             BuyCosmetics()
-            Fourinit := false
+            Cosemticinit := false
         }
     }
 
@@ -1124,11 +1139,8 @@ GearCraft(){
         { Name: "Lightning Rod", Materials: ["Basic Sprinkler", "Advanced Sprinkler", "Godly Sprinkler"], CraftTime: 2700 },
         { Name: "Tanning Mirror", Materials: ["Basic Sprinkler", "Advanced Sprinkler", "Godly Sprinkler"], CraftTime: 2700 },
         { Name: "Reclaimer", Materials: ["Common Egg", "Harvest Tool"], CraftTime: 1500 },
-        { Name: "Tropical Mist Sprinkler", Materials: ["Coconut kg", "Dragon Fruit kg", "Mango kg", "Godly Sprinkler"], CraftTime: 3600 },
-        { Name: "Berry Blusher Sprinkler", Materials: ["Grape kg", "Blueberry kg", "Strawberry kg", "Godly Sprinkler"], CraftTime: 3600 },
-        { Name: "Spice Spirtzer Sprinkler", Materials: ["Pepper kg", "Ember Lily kg", "Cacao kg", "Master Sprinkler"], CraftTime: 3600 },
-        { Name: "Sweet Soaker Sprinkler", Materials: ["Watermelon kg", "Watermelon kg", "Watermelon kg", "Master Sprinkler"], CraftTime: 3600 },
-        { Name: "Flower Froster Sprinkler", Materials: ["Orange Tulip kg", "Daffodil kg", "Advanced Sprinkler", "Basic Sprinkler"], CraftTime: 3600 },
+        { Name: "Event Lantern", Materials: ["Recall Wrench", "Apple kg"], CraftTime: 10 },
+        { Name: "Mutation Spray Glimmering", Materials: ["Cleaning Spray", "Orange Tulip Seed", "Daffodil Seed", "Mango kg"], CraftTime: 900 },
         { Name: "Stalk Sprout Sprinkler", Materials: ["Bamboo kg", "Beanstalk kg", "Mushroom kg", "Advanced Sprinkler"], CraftTime: 3600 },
         { Name: "Mutation Spray Choc", Materials: ["Cleaning Spray", "Cacao kg"], CraftTime: 720 },
         { Name: "Mutation Spray Chilled", Materials: ["Cleaning Spray", "Godly Sprinkler"], CraftTime: 300 },
@@ -1168,6 +1180,7 @@ SeedCraft(){
     Send("{" WKey " up}")
     Sleep(1000)
     SeedRecipe := [
+        { Name: "Mandrake", Materials: ["Carrot Seed", "Beanstalk kg", "Common Egg"], CraftTime: 300 },
         { Name: "Twisted Tangle", Materials: ["Cactus Seed", "Bamboo Seed", "Cactus kg", "Mango kg"], CraftTime: 900 },
         { Name: "Veinpetal", Materials: ["Orange Tulip Seed", "Daffodil Seed", "Beanstalk kg", "Burning bud kg"], CraftTime: 1200 },
         { Name: "Horsetail", Materials: ["Daffodil Seed", "Bamboo kg", "Corn kg"], CraftTime: 900 },
@@ -1246,7 +1259,24 @@ DetectOnett(){
 }
 
 
-
+Closelb(){
+    ActivateRoblox()
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    capX := windowX + windowWidth - 300  
+    capY := windowY                      
+    capW := 300                          
+    capH := 200                          
+    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["Leaderboard"], , , , , , 50) = 1) {
+        Send("{Tab}")
+        Sleep(100)
+        Gdip_DisposeImage(pBMScreen)
+        return true
+    }
+    Gdip_DisposeImage(pBMScreen)
+    return false 
+}
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1302,6 +1332,8 @@ MainLoop() {
             RewardInterupt()
         }
         if (Mod(A_Index, 30) == 0){
+            CloseClutter()
+            Closelb()
             if (Disconnect()){
                 Sleep(1500)
                 equipRecall()
@@ -1321,16 +1353,20 @@ MainLoop() {
 ShowToolTip(){
     global LastShopTime
     global LastEggsTime
-
+    global LastEventTime
+    global LastMerchantTime
     global LastGearCraftingTime
     global LastSeedCraftingTime
+    global LastCookingTime
+
     global GearCraftingTime
     global SeedCraftingTime
-    global LastCookingTime
 
     static SeedsEnabled := IniRead(settingsFile, "Seeds", "Seeds") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
+    static EventEnabled := false
+    ; static EventEnabled := IniRead(settingsFile, "Events", "Events") + 0
     static gearCraftingEnabled := IniRead(settingsFile, "GearCrafting", "GearCrafting") + 0
     static seedCraftingEnabled := IniRead(settingsFile, "SeedCrafting", "SeedCrafting") + 0
     static cosmeticEnabled := IniRead(settingsFile, "Settings", "Cosmetics") + 0
@@ -1352,7 +1388,11 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-
+    if (EventEnabled) {
+        static EventTime := 3600
+        EventRemaining := Max(0, EventTime - (currentTime - LastEventTime))
+        tooltipText .= "Event: " (EventRemaining // 60) ":" Format("{:02}", Mod(EventRemaining, 60)) "`n"
+    }
     if (EggsEnabled) {
         static EggTime := 1800
         EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
@@ -1361,9 +1401,9 @@ ShowToolTip(){
     if (CookingEnabled) {
         static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
         CookingRemaining := Max(0, CookingTime - (currentTime - LastCookingTime))
-        eventM := CookingRemaining // 60
-        eventS := Mod(CookingRemaining, 60)
-        tooltipText .= "Cooking for: " eventM ":" Format("{:02}", eventS) "`n"
+        cookingM := CookingRemaining // 60
+        cookingS := Mod(CookingRemaining, 60)
+        tooltipText .= "Cooking: " cookingM ":" Format("{:02}", cookingS) "`n"
     }
     if (cosmeticEnabled) {
         utcNow := A_NowUTC
@@ -1382,20 +1422,9 @@ ShowToolTip(){
         tooltipText .= "Cosmetics: " cosmeticH ":" Format("{:02}", cosmeticM) ":" Format("{:02}", cosmeticS) "`n"
     }
     if (merchantEnabled) {
-        utcNow := A_NowUTC
-        utcHour := FormatTime(utcNow, "H")
-        utcMin := FormatTime(utcNow, "m")
-        utcSec := FormatTime(utcNow, "s")
-
-        totalSecNow := utcHour * 3600 + utcMin * 60 + utcSec
-        nextMerchantSec := Ceil(totalSecNow / (4 * 3600)) * 4 * 3600
-        remainingSec := Mod(nextMerchantSec - totalSecNow, 14400)  ; every 4 hours
-
-        merchantH := remainingSec // 3600
-        merchantM := Mod(remainingSec, 3600) // 60
-        merchantS := Mod(remainingSec, 60)
-
-        tooltipText .= "Merchant: " merchantH ":" Format("{:02}", merchantM) ":" Format("{:02}", merchantS) "`n"
+        static merchantTime := 3600
+        merchantRemaining := Max(0, merchantTime - (currentTime - LastMerchantTime))
+        tooltipText .= "Merchant: " (merchantRemaining // 60) ":" Format("{:02}", Mod(merchantRemaining, 60)) "`n"
     }
     if (gearCraftingEnabled) {
         gearCraftRemaining := Max(0, GearCraftingTime - (currentTime - LastGearCraftingTime))
@@ -1466,6 +1495,7 @@ CookingEvent(){
         relativeMouseMove(0.5, thing)
         Click
     }
+    CloseClutter()
     PlayerStatus("Cooking food!", "0x22e6a8",,false)
     Send("1")
     Sleep(250)
