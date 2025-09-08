@@ -49,7 +49,7 @@ Need help extracting ZIPs or setting things up?
 * **Discord Server:** [link](https://discord.com/invite/Vc465gUXHk)
 * **Discord user:** [`_epic.`](https://discord.com/users/726162926851063919)
 * **GitHub:** [epicisgood/Grow-a-Garden-Macro](https://github.com/epicisgood/Grow-a-Garden-Macro)
-* **Donate:** [Give me Robux!](https://www.roblox.com/games/3780570380/Donation-area#!/store)
+* **Donate:** [Give me Robux!](https://www.roblox.com/games/18130765440/Grow-a-Garden-Donation-Area#!/store)
 
 ---
 
