@@ -929,10 +929,18 @@ clickTierSeeds(tier){
         Cords := StrSplit(OutputList, ",")
          if (tier == 1) {
             x := Cords[1] + capX * 1.1
-            y := Cords[2] + capY * 1.6
+            y := Cords[2] + capY * 1.7
+            if A_ScreenWidth == 800 {
+                x := 613
+                y := 226
+            }
         } else if (tier == 2) {
             x := Cords[1] + capX * 1.1
             y := Cords[2] + capY * 1.85
+            if windowHeight == 1080 {
+                x := 1430
+                y := 431
+            }
         }
         MouseMove(x, y)
         Sleep(50)
