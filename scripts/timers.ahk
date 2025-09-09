@@ -4,6 +4,8 @@ nowUnix() {
 
 
 LastShopTime := nowUnix()
+LastSeeds2Time := nowUnix()
+LastEggs2Time := nowUnix()
 LastEggsTime := nowUnix()
 LastEventTime := nowUnix()
 LastMerchantTime := nowUnix()
@@ -16,7 +18,7 @@ LastCookingTime := nowUnix()
 LastCosmetics := nowUnix()
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastEggsTime, LastCosmetics, LastMerchantTime, LastEventTime
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastSeeds2Time, LastEggsTime, LastCosmetics, LastMerchantTime, LastEventTime, LastEggs2Time
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
     Rewardlist := []
@@ -29,9 +31,17 @@ RewardChecker() {
         Rewardlist.Push("Seeds")
         Rewardlist.Push("Gears")
     }
+    if (currentTime - LastSeeds2Time >= 3600) {
+        LastSeeds2Time := currentTime
+        Rewardlist.Push("Seeds2")
+    }
     if (currentTime - LastEggsTime >= 1800) {
         LastEggsTime := currentTime
         Rewardlist.Push("Eggs")
+    }
+    if (currentTime - LastEggs2Time >= 1800) {
+        LastEggs2Time := currentTime
+        Rewardlist.Push("Eggs2")
     }
     if (currentTime - LastEventTime >= 3600) {
         LastEventTime := currentTime
@@ -69,11 +79,17 @@ RewardInterupt() {
         if (v = "Seeds") {
             BuySeeds()
         }
+        if (v = "Seeds2") {
+            BuySeeds2()
+        }
         if (v = "Gears") {
             BuyGears()
         }
         if (v = "Eggs") {
             BuyEggs()
+        }
+        if (v = "Eggs2") {
+            BuyEggs2()
         }
         ; if (v = "Event"){
         ;     BuyEvent()

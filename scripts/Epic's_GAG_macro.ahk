@@ -469,7 +469,7 @@ Clickbutton(button, clickit := 1){
         return 1
     }
     if (button == "Seeds" || button == "Sell") {    
-        if (Gdip_ImageSearch(pBMScreen, bitmaps[button], &OutputList, , , , , 100,,7) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[button "2"], &OutputList, , , , , varation,,7) = 1) {
             if (clickit == 1){
                 Cords := StrSplit(OutputList, ",")
                 x := Cords[1] + capX - 2
@@ -691,7 +691,7 @@ CheckStock(index, list, crafting := false){
     pBMScreen := Gdip_BitmapFromScreen(captureX "|" captureY "|" captureWidth "|" captureHeight)
     If (Gdip_ImageSearch(pBMScreen, bitmaps["GreenStock"], &OutputList, , , , , 3,,3) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["GreenStock2"], &OutputList , , , , , 3,,3) = 1) {
         Cords := StrSplit(OutputList, ",")
-        x := Cords[1] + captureX - 5
+        x := Cords[1] + captureX - 2
         y := Cords[2] + captureY - 10
         MouseMove(x, y)
         Sleep(25)
@@ -730,14 +730,29 @@ CheckStock(index, list, crafting := false){
 }
 
 buyShop(itemList, itemType, crafting := false){
-    if (itemType == "Event" || itemType == "Eggs"){
+    if (itemType == "Event" || itemType == "Eggs" || itemType == "Eggs2"){
         pos := 0.8
     } else {
         pos := 0.845
     }
+    if (itemType == "Seeds") {
+        tierHandler(1,"Seeds")
+    } else if (itemType == "Seeds2"){
+        tierHandler(2,"Seeds")
+    } else if (itemType == "Eggs"){
+        tierHandler(1,"Eggs")
+    } else if (itemType == "Eggs2"){
+        tierHandler(2,"Eggs")
+    }
 
     for (item in itemlist){
         if (A_index == 1){
+            if (crafting){
+                relativeMouseMove(0.65,0.4)  
+                Sleep(150)
+                Click
+                Sleep(150)
+            } 
             relativeMouseMove(0.4,pos)
             Loop itemList.length * 2 {
                 Send("{WheelUp}")
@@ -903,6 +918,77 @@ CloseShop(crafting := false){
 
 }
 
+clickTierSeeds(tier){
+    capX := windowX + windowWidth * 0.60
+    capY := windowY + windowHeight * 0.15
+    capW := windowWidth * 0.38
+    capH := windowHeight * 0.25
+    varation := 60
+    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton2"], &OutputList, , , , , varation,,7 || Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton"], &OutputList, , , , , varation,,7) = 1)) {
+        Cords := StrSplit(OutputList, ",")
+         if (tier == 1) {
+            x := Cords[1] + capX * 1.1
+            y := Cords[2] + capY * 1.6
+        } else if (tier == 2) {
+            x := Cords[1] + capX * 1.1
+            y := Cords[2] + capY * 1.85
+        }
+        MouseMove(x, y)
+        Sleep(50)
+        Click
+        Gdip_DisposeImage(pBMScreen)
+        return true
+    }
+    Gdip_DisposeImage(pBMScreen)
+    return false
+}
+
+clickTierEggs(tier){
+    capX := windowX + windowWidth * 0.60
+    capY := windowY + windowHeight * 0.15
+    capW := windowWidth * 0.38
+    capH := windowHeight * 0.25
+    varation := 60
+    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton2"], &OutputList, , , , , varation,,7 || Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton"], &OutputList, , , , , varation,,7) = 1)) {
+        Cords := StrSplit(OutputList, ",")
+        if (tier == 1) {
+            x := Cords[1] + capX * 1.05
+            y := Cords[2] + capY * 1.675
+        } else if (tier == 2) {
+            x := Cords[1] + capX * 1.05
+            y := Cords[2] + capY * 2
+        }
+        MouseMove(x, y)
+        Sleep(50)
+        Click
+        Gdip_DisposeImage(pBMScreen)
+        return true
+    }
+    Gdip_DisposeImage(pBMScreen)
+    return false
+}
+
+tierHandler(tier, type){
+    loop 15 {
+        Sleep(500)
+        if (type == "Seeds"){
+            if (clickTierSeeds(tier)){
+                Sleep(500)
+                return true
+            }
+        }
+        if (type == "Eggs"){
+            if (clickTierEggs(tier)){
+                Sleep(500)
+                return true
+            }
+        }
+    }
+    return false
+
+}
 
 CloseClutter(){
     Clickbutton("Xbutton")
@@ -939,6 +1025,8 @@ getItems(item){
 
 initShops(){
     static Shopinit := true
+    static Seeds2init := true
+    static Eggs2init := true
     static Egginit := true
     static Merchantinit := true
     static Cosemticinit := true
@@ -969,6 +1057,18 @@ initShops(){
             BuyCosmetics()
             Cosemticinit := false
         }
+    } else if (Seeds2init == true){
+        if (A_min < 5) {
+            global LastSeeds2 := nowUnix()
+            BuySeeds2()
+            Seeds2init := false
+        }
+    } else if (Eggs2init == true){
+        if (A_Min == 22 || A_Min == 52) {
+            global LastEggs2 := nowUnix()
+            BuyEggs2()
+            Eggs2init := false
+        }
     }
 
 
@@ -991,6 +1091,30 @@ BuySeeds(){
             continue
         }
         buyShop(seedItems, "Seeds")
+        CloseClutter()
+        return 1
+    }
+    PlayerStatus("Failed to buy seeds 3 times, CLOSING ROBLOX!", "0x001a12")
+    CloseRoblox()
+}
+
+BuySeeds2(){
+    seedItems := getItems("Seeds2")
+    if !(CheckSetting("Seeds2", "Seeds2")){
+        return
+    }
+    loop 3 {
+        PlayerStatus("Going to buy Tier 2 Seeds!", "0x22e6a8",,false,,false)
+        relativeMouseMove(0.5, 0.5)
+        Sleep(500)
+        Clickbutton("Seeds")
+        Sleep(1000)
+        Send("{" Ekey "}")
+        if !DetectShop("Tier 2 Seeds"){
+            CameraCorrection()
+            continue
+        }
+        buyShop(seedItems, "Seeds2")
         CloseClutter()
         return 1
     }
@@ -1064,6 +1188,36 @@ BuyEggs(){
         return 1
     }
 }
+BuyEggs2(){
+    if !(CheckSetting("Eggs2", "Eggs2")){
+        return
+    }
+    eggitems := getItems("Eggs2")
+    loop 3 {
+        PlayerStatus("Going to buy Eggs Tier 2!", "0x22e6a8",,false,,false)
+        ActivateRoblox()
+        Clickbutton("Garden")
+        Sleep(500)
+        Send("1")
+        MouseMove windowX + windowWidth//2, windowY + windowHeight//2
+        Click
+        Sleep(2000)
+        Send("{s Down}")
+        HyperSleep(600)
+        Send("{s Up}")
+        Sleep(1500)
+        Send("{" Ekey "}")
+        clickOption(1,6)
+        if !DetectShop("egg tier 2"){
+            CameraCorrection()
+            continue
+        }
+        buyShop(eggitems, "Eggs2")
+        CloseClutter()
+        return 1
+    }
+}
+
 
 BuyCosmetics(){
     if !(CheckSetting("Settings", "Cosmetics")){
@@ -1236,6 +1390,8 @@ BuyMerchant(){
     return 0
 }
 
+
+
 DetectOnett(){
     ActivateRoblox()
     hwnd := GetRobloxHWND()
@@ -1307,12 +1463,15 @@ MainLoop() {
 
     MyWindow.Destroy()
     CloseChat() 
+    Closelb()
     equipRecall()
     CameraCorrection()
     CookingEvent()
     BuySeeds()
+    BuySeeds2()
     BuyGears()
     BuyEggs()
+    BuyEggs2()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1352,6 +1511,8 @@ MainLoop() {
 
 ShowToolTip(){
     global LastShopTime
+    global LastSeeds2Time
+    global LastEggs2Time
     global LastEggsTime
     global LastEventTime
     global LastMerchantTime
@@ -1363,10 +1524,12 @@ ShowToolTip(){
     global SeedCraftingTime
 
     static SeedsEnabled := IniRead(settingsFile, "Seeds", "Seeds") + 0
+    static Seeds2Enabled := IniRead(settingsFile, "Seeds2", "Seeds2") + 0
+    static Eggs2Enabled := IniRead(settingsFile, "Eggs2", "Eggs2") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
     static EventEnabled := false
-    ; static EventEnabled := IniRead(settingsFile, "Events", "Events") + 0
+    ; static EventEnabled := IniRead(settingsFile, "Event", "Event") + 0
     static gearCraftingEnabled := IniRead(settingsFile, "GearCrafting", "GearCrafting") + 0
     static seedCraftingEnabled := IniRead(settingsFile, "SeedCrafting", "SeedCrafting") + 0
     static cosmeticEnabled := IniRead(settingsFile, "Settings", "Cosmetics") + 0
@@ -1381,6 +1544,11 @@ ShowToolTip(){
         static SeedTime := 300
         SeedRemaining := Max(0, SeedTime - (currentTime - LastShopTime))
         tooltipText .= "Seeds: " (SeedRemaining // 60) ":" Format("{:02}", Mod(SeedRemaining, 60)) "`n"
+    }
+    if (Seeds2Enabled) {
+        static Seed2Time := 3600
+        Seed2Remaining := Max(0, Seed2Time - (currentTime - LastSeeds2Time))
+        tooltipText .= "Seeds T2: " (Seed2Remaining // 60) ":" Format("{:02}", Mod(Seed2Remaining, 60)) "`n"
     }
 
     if (GearsEnabled) {
@@ -1397,6 +1565,11 @@ ShowToolTip(){
         static EggTime := 1800
         EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
         tooltipText .= "Eggs: " (EggRemaining // 60) ":" Format("{:02}", Mod(EggRemaining, 60)) "`n"
+    }
+    if (Eggs2Enabled) {
+        static Egg2Time := 1800
+        Egg2Remaining := Max(0, Egg2Time - (currentTime - LastEggs2Time))
+        tooltipText .= "Eggs T2: " (Egg2Remaining // 60) ":" Format("{:02}", Mod(Egg2Remaining, 60)) "`n"
     }
     if (CookingEnabled) {
         static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
@@ -1506,14 +1679,14 @@ CookingEvent(){
 
 
 BuyEvent(){
-    if !(CheckSetting("Events", "Events")){
+    if !(CheckSetting("Event", "Event")){
         return 0
     }
     PlayerStatus("Going to Event Shop!", "0x22e6a8",,false,,false)
     if !DetectShop("Event"){
         return 0 
     }
-    buyShop(getItems("Events"), "Events")
+    buyShop(getItems("Event"), "Event")
     CloseClutter()
     return 1
 }

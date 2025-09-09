@@ -1,7 +1,7 @@
 
 #Requires AutoHotkey v2.0
 
-version := "v1.2.1"
+version := "v1.2.2"
 settingsFile := "settings.ini"
 
 
@@ -131,8 +131,10 @@ SaveSettings(settingsJson) {
 
     sectionMap := Map(
         "seedItems", "Seeds",
+        "seed2Items", "Seeds2",
         "gearItems", "Gears",
         "EggItems",  "Eggs",
+        "Egg2Items", "Eggs2",
         "GearCraftingItems", "GearCrafting",
         "SeedCraftingItems", "SeedCrafting",
         "EventItems", "Events",
@@ -153,10 +155,12 @@ SaveSettings(settingsJson) {
 SendSettings(){
 	settingsFile := A_WorkingDir . "\settings.ini"
     seedItems := getItems("Seeds")
+    seed2Items := getItems("Seeds2")
 
     gearItems := getItems("Gears")
 
     EggItems := getItems("Eggs")
+    Egg2Items := getItems("Eggs2")
 
     GearCraftingItems := getItems("GearCrafting")
     
@@ -165,8 +169,10 @@ SendSettings(){
     EventItems := getItems("Events")
 
     seedItems.Push("Seeds")
+    seed2Items.Push("Seeds2")
     gearItems.Push("Gears")
     EggItems.Push("Eggs")
+    Egg2Items.Push("Eggs2")
     GearCraftingItems.Push("GearCrafting")
     SeedCraftingItems.Push("SeedCrafting")
     EventItems.Push("Events")
@@ -184,11 +190,17 @@ SendSettings(){
         for i in seedItems {
             IniWrite("1", settingsFile, "Seeds", StrReplace(i, " ", ""))
         }
+        for i in seed2Items {
+            IniWrite("0", settingsFile, "Seeds2", StrReplace(i, " ", ""))
+        }
         for i in gearItems {
             IniWrite("1", settingsFile, "Gears", StrReplace(i, " ", ""))
         }
         for i in EggItems {
             IniWrite("1", settingsFile, "Eggs", StrReplace(i, " ", ""))
+        }
+        for i in Egg2Items {
+            IniWrite("0", settingsFile, "Eggs2", StrReplace(i, " ", ""))
         }
         for i in GearCraftingItems {
             IniWrite("0", settingsFile, "GearCrafting", StrReplace(i, " ", ""))
@@ -224,6 +236,7 @@ SendSettings(){
       , SearchList:  IniRead(settingsFile, "Settings", "SearchList")
       , CookingTime:  IniRead(settingsFile, "Settings", "CookingTime")
       , SeedItems: Map()
+      , Seed2Items: Map()
       , GearItems: Map()
       , EggItems:  Map()
       , GearCraftingItems: Map()
@@ -237,6 +250,12 @@ SendSettings(){
         IniWrite(value, settingsFile, "Seeds", key)
         SettingsJson.SeedItems[item] := value
     }
+    for item in seed2Items {
+        key := StrReplace(item, " ", "")
+        value := IniRead(settingsFile, "Seeds2", key, "0")
+        IniWrite(value, settingsFile, "Seeds2", key)
+        SettingsJson.Seed2Items[item] := value
+    }
 
     for item in gearItems {
         key := StrReplace(item, " ", "")
@@ -249,6 +268,13 @@ SendSettings(){
         key := StrReplace(item, " ", "")
         value := IniRead(settingsFile, "Eggs", key, "1")
         IniWrite(value, settingsFile, "Eggs", key)
+        SettingsJson.EggItems[key] := value
+    }
+
+    for item in Egg2Items {
+        key := StrReplace(item, " ", "")
+        value := IniRead(settingsFile, "Eggs2", key, "0")
+        IniWrite(value, settingsFile, "Eggs2", key)
         SettingsJson.EggItems[key] := value
     }
 
