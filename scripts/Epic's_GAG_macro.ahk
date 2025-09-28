@@ -1716,7 +1716,7 @@ F3::
     ; pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
     ; Gdip_SaveBitmapToFile(pBMScreen,"ss.png")
     ; Gdip_DisposeImage(pBMScreen)
-    BuyGears()
+    BuyEvoSeeds()
     ; PauseMacro()
 }
 
@@ -1778,6 +1778,8 @@ BuyEvoSeeds(){
     clickItem("Event Latern", "Event Latern")
 
     Sleep(1500)
+    Walk(500, Akey)
+    Sleep(500)
     Send("{" Ekey "}")
     clickOption(2,5)
     if !DetectShop("EvoSeeds"){
