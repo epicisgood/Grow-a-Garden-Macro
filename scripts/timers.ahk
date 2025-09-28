@@ -7,7 +7,10 @@ LastShopTime := nowUnix()
 LastSeeds2Time := nowUnix()
 LastEggs2Time := nowUnix()
 LastEggsTime := nowUnix()
-LastEventTime := nowUnix()
+LastEvoSeedsTime := nowUnix()
+; LastfallCosmeticsTime := nowUnix()
+; LastfallGearsTime := nowUnix()
+; LastfallPetsTime := nowUnix()
 LastMerchantTime := nowUnix()
 
 LastGearCraftingTime := nowUnix()
@@ -18,7 +21,10 @@ LastCookingTime := nowUnix()
 LastCosmetics := nowUnix()
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastSeeds2Time, LastEggsTime, LastCosmetics, LastMerchantTime, LastEventTime, LastEggs2Time
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastSeeds2Time, LastEggsTime, LastCosmetics, LastMerchantTime, LastEggs2Time,
+    LastEvoSeedsTime 
+    ; , LastfallPetsTime, lastfallGearsTime, LastfallCosmeticsTime
+
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
     Rewardlist := []
@@ -30,6 +36,8 @@ RewardChecker() {
         LastShopTime := currentTime
         Rewardlist.Push("Seeds")
         Rewardlist.Push("Gears")
+        Rewardlist.Push("BuyEvoSeeds")
+        
     }
     if (currentTime - LastSeeds2Time >= 3600) {
         LastSeeds2Time := currentTime
@@ -43,10 +51,18 @@ RewardChecker() {
         LastEggs2Time := currentTime
         Rewardlist.Push("Eggs2")
     }
-    if (currentTime - LastEventTime >= 3600) {
-        LastEventTime := currentTime
-        Rewardlist.Push("Event")
-    }
+    ; if (currentTime - LastfallCosmeticsTime >= 3600) {
+    ;     LastfallCosmeticsTime := currentTime
+    ;     Rewardlist.Push("fallCosmetics")
+    ; }
+    ; if (currentTime - LastfallGearsTime >= 3600) {
+    ;     LastfallGearsTime := currentTime
+    ;     Rewardlist.Push("fallGears")
+    ; }
+    ; if (currentTime - LastfallPetsTime >= 3600) {
+    ;     LastfallPetsTime := currentTime
+    ;     Rewardlist.Push("fallPets")
+    ; }
     if (currentTime - LastMerchantTime >= 3600) {
         LastMerchantTime := currentTime
         Rewardlist.Push("TravelingMerchant")
@@ -91,8 +107,17 @@ RewardInterupt() {
         if (v = "Eggs2") {
             BuyEggs2()
         }
-        ; if (v = "Event"){
-        ;     BuyEvent()
+        if (v = "EvoSeeds"){
+            BuyEvoSeeds()
+        }
+        ; if (v = "fallCosmetics"){
+        ;     BuyfallCosmetics()
+        ; }
+        ; if (v = "fallGears"){
+        ;     BuyfallGears()
+        ; }
+        ; if (v = "fallPets"){
+        ;     BuyfallPets()
         ; }
         if (v = "GearCrafting") {
             GearCraft()

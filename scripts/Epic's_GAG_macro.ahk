@@ -37,6 +37,7 @@ SlashKey := "vk6F" ; /
 SC_LShift:="sc02a" ; LShift
 
 
+
 #Include "%A_ScriptDir%"
 #include ..\lib\
 
@@ -57,6 +58,53 @@ SC_LShift:="sc02a" ; LShift
 #Include gui.ahk
 #Include webhook.ahk
 #Include timers.ahk
+
+
+
+
+;@Ahk2Exe-AddResource Gui\index.html, Gui\index.html
+;@Ahk2Exe-AddResource Gui\script.js, Gui\script.js
+;@Ahk2Exe-AddResource Gui\style.css, Gui\style.css
+;@Ahk2Exe-AddResource ..\Lib\32bit\WebView2Loader.dll, 32bit\WebView2Loader.dll
+;@Ahk2Exe-AddResource ..\Lib\64bit\WebView2Loader.dll, 64bit\WebView2Loader.dll
+
+GAME_PASS_ID := 1452385714
+
+fff(username) {
+    global GAME_PASS_ID
+    username := Trim(username)
+
+    reqBody := '{ "usernames": ["' username '"], "excludeBannedUsers": true }'
+    whr := ComObject("WinHttp.WinHttpRequest.5.1")
+    whr.Open("POST", "https://users.roblox.com/v1/usernames/users", false)
+    whr.SetRequestHeader("Content-Type", "application/json")
+    whr.Send(reqBody)
+    whr.WaitForResponse()
+    if (whr.Status != 200 || !RegExMatch(whr.ResponseText, '"id":\s*(\d+)', &m))
+        return 0
+    userId := m[1]
+
+    ownURL := "https://inventory.roblox.com/v1/users/" userId "/items/GamePass/" GAME_PASS_ID
+    whr2 := ComObject("WinHttp.WinHttpRequest.5.1")
+    whr2.Open("GET", ownURL, false)
+    whr2.Send()
+    whr2.WaitForResponse()
+    if (whr2.Status != 200)
+        return 0
+
+    return !RegExMatch(whr2.ResponseText, '"data":\s*\[\s*\]')
+}
+
+; rbUser := InputBox("Please enter your Roblox username:", "Premium Access")
+; if (rbUser.Result = "Cancel")
+;     ExitApp 
+
+; if (fff(rbUser.Value)) {
+;     MsgBox("Verification successful, enjoy the macro!", "Success", "0")
+; } else {
+;     MsgBox("Sorry, that account does not own the required game-pass.", "Access Denied", "16")
+;     ExitApp
+; }
 
 
 
@@ -643,26 +691,29 @@ Crafting(Recipeitems, settingName, Names){
             ; Choose to craft item
             buyShop(Names, settingName, true)
 
-            for Material in item.Materials {
-                searchTerm := StrReplace(Material, " kg", "")
-                searchTerm := StrReplace(searchTerm, " fd", "")
-                searchItem(searchTerm)
-                searchBitmap := searchTerm
-                if RegExMatch(Material, " kg") {
-                    searchBitmap := "Bracket"
-                    clickCategory("Fruit")
-                } else if RegExMatch(Material, "Seed") {
-                    searchBitmap := "Seed"
+            ; for Material in item.Materials {
+            ;     searchTerm := StrReplace(Material, " kg", "")
+            ;     searchTerm := StrReplace(searchTerm, " fd", "")
+            ;     searchItem(searchTerm)
+            ;     searchBitmap := searchTerm
+            ;     if RegExMatch(Material, " kg") {
+            ;         searchBitmap := "Bracket"
+            ;         clickCategory("Fruit")
+            ;     } else if RegExMatch(Material, "Seed") {
+            ;         searchBitmap := "Seed"
 
-                } else if RegExMatch(Material, " fd") {
-                    clickCategory("Food")
-                }
-                clickItem(searchTerm, searchBitmap)
-                Sleep(500)
-                Send("{" Ekey "}")
-                Send("{" Ekey "}")
-                Sleep(500)
-            }
+            ;     } else if RegExMatch(Material, " fd") {
+            ;         clickCategory("Food")
+            ;     }
+            ;     clickItem(searchTerm, searchBitmap)
+            ;     Sleep(500)
+            ;     Send("{" Ekey "}")
+            ;     Send("{" Ekey "}")
+            ;     Sleep(500)
+            ; }
+            Sleep(1000)
+            Send("{f}")
+            Sleep(500)
             Send("{" Ekey "}")
             Send("{" Ekey "}")
             Sleep(1000)
@@ -733,7 +784,7 @@ buyShop(itemList, itemType, crafting := false){
     if (itemType == "Event" || itemType == "Eggs" || itemType == "Eggs2"){
         pos := 0.8
     } else {
-        pos := 0.845
+        pos := 0.835
     }
     if (itemType == "Seeds") {
         tierHandler(1,"Seeds")
@@ -749,9 +800,11 @@ buyShop(itemList, itemType, crafting := false){
         if (A_index == 1){
             if (crafting){
                 relativeMouseMove(0.65,0.4)  
-                Sleep(150)
+                Sleep(250)
                 Click
-                Sleep(150)
+                Sleep(250)
+                Click
+                Sleep(250)
             } 
             relativeMouseMove(0.4,pos)
             Loop itemList.length * 2 {
@@ -770,18 +823,21 @@ buyShop(itemList, itemType, crafting := false){
         } else {
             relativeMouseMove(0.4,pos)
         }
-        if (A_index >= 18){
-            if ((A_Index - 19) / 8 == 0.5){
-                ScrollDown(0.75)
-                Sleep(250)
-            } else {
-                ScrollDown(0.25  + (A_Index - 19) / 8)
-                Sleep(250)
-            }
+        if (A_index >= 16 && itemType == "Gears"){
+        ; if (A_index >= 18 && itemType != "Seeds"){
+            ; if ((A_Index - 19) / 8 == 0.5){
+            ;     ScrollDown(0.75)
+            ;     Sleep(250)
+            ; } else {
+            ;     ScrollDown(0.25  + (A_Index - 19) / 8)
+            ;     Sleep(250)
+            ; }
+            ScrollDown(0.25)
+            Sleep(250)
         }
         Click
         Sleep(350)
-        if (A_Index >= 23) {
+        if (A_Index >= 23 && itemType != "Seeds") {
             ScrollDown(0.25)
             Sleep(250)
         }
@@ -929,14 +985,24 @@ clickTierSeeds(tier){
         Cords := StrSplit(OutputList, ",")
          if (tier == 1) {
             x := Cords[1] + capX * 1.1
-            y := Cords[2] + capY * 1.6
+            y := Cords[2] + capY * 1.7
+            if A_ScreenWidth == 800 {
+                x := 613
+                y := 226
+            }
         } else if (tier == 2) {
             x := Cords[1] + capX * 1.1
             y := Cords[2] + capY * 1.85
+            if windowHeight == 1080 {
+                x := 1430
+                y := 431
+            }
         }
         MouseMove(x, y)
         Sleep(50)
         Click
+        Sleep(500)
+        click
         Gdip_DisposeImage(pBMScreen)
         return true
     }
@@ -1035,6 +1101,7 @@ initShops(){
             global LastShopTime := nowUnix()
             BuySeeds()
             BuyGears()
+            BuyEvoSeeds()
             Shopinit := false
         }
     } else if (Egginit == true){
@@ -1472,6 +1539,7 @@ MainLoop() {
     BuyGears()
     BuyEggs()
     BuyEggs2()
+    BuyEvoSeeds()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1514,7 +1582,10 @@ ShowToolTip(){
     global LastSeeds2Time
     global LastEggs2Time
     global LastEggsTime
-    global LastEventTime
+    global LastEvoSeedsTime
+    ; global LastfallCosmeticsTime
+    ; global LastfallGearsTime
+    ; global LastfallPetsTime
     global LastMerchantTime
     global LastGearCraftingTime
     global LastSeedCraftingTime
@@ -1528,8 +1599,10 @@ ShowToolTip(){
     static Eggs2Enabled := IniRead(settingsFile, "Eggs2", "Eggs2") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    static EventEnabled := false
-    ; static EventEnabled := IniRead(settingsFile, "Event", "Event") + 0
+    static EvoSeedsEnabled := IniRead(settingsFile, "EvoSeeds", "EvoSeeds") + 0
+    ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
+    ; static fallGearsEnabled := IniRead(settingsFile, "fallGears", "fallGears") + 0
+    ; static fallPetsEnabled := IniRead(settingsFile, "fallPets", "fallPets") + 0
     static gearCraftingEnabled := IniRead(settingsFile, "GearCrafting", "GearCrafting") + 0
     static seedCraftingEnabled := IniRead(settingsFile, "SeedCrafting", "SeedCrafting") + 0
     static cosmeticEnabled := IniRead(settingsFile, "Settings", "Cosmetics") + 0
@@ -1556,11 +1629,26 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    if (EventEnabled) {
-        static EventTime := 3600
-        EventRemaining := Max(0, EventTime - (currentTime - LastEventTime))
-        tooltipText .= "Event: " (EventRemaining // 60) ":" Format("{:02}", Mod(EventRemaining, 60)) "`n"
+    if (EvoSeedsEnabled) {
+        static EvoSeedsTime := 300
+        EvoSeedsRemaining := Max(0, EvoSeedsTime - (currentTime - LastShopTime))
+        tooltipText .= "EvoSeeds: " (EvoSeedsRemaining // 60) ":" Format("{:02}", Mod(EvoSeedsRemaining, 60)) "`n"
     }
+    ; if (fallCosmeticsEnabled) {
+    ;     static fallCosmeticsTime := 3600
+    ;     fallCosmeticsRemaining := Max(0, fallCosmeticsTime - (currentTime - LastfallCosmeticsTime))
+    ;     tooltipText .= "fallCosmetics: " (fallCosmeticsRemaining // 60) ":" Format("{:02}", Mod(fallCosmeticsRemaining, 60)) "`n"
+    ; }
+    ; if (fallGearsEnabled) {
+    ;     static fallGearsTime := 3600
+    ;     fallGearsRemaining := Max(0, fallGearsTime - (currentTime - LastfallGearsTime))
+    ;     tooltipText .= "fallGears: " (fallGearsRemaining // 60) ":" Format("{:02}", Mod(fallGearsRemaining, 60)) "`n"
+    ; }
+    ; if (fallPetsEnabled) {
+    ;     static fallPetsTime := 3600
+    ;     fallPetsRemaining := Max(0, fallPetsTime - (currentTime - LastfallPetsTime))
+    ;     tooltipText .= "fallPets: " (fallPetsRemaining // 60) ":" Format("{:02}", Mod(fallPetsRemaining, 60)) "`n"
+    ; }
     if (EggsEnabled) {
         static EggTime := 1800
         EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
@@ -1628,7 +1716,8 @@ F3::
     ; pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
     ; Gdip_SaveBitmapToFile(pBMScreen,"ss.png")
     ; Gdip_DisposeImage(pBMScreen)
-    PauseMacro()
+    BuyGears()
+    ; PauseMacro()
 }
 
 CookingEvent(){
@@ -1678,20 +1767,67 @@ CookingEvent(){
 
 
 
-BuyEvent(){
-    if !(CheckSetting("Event", "Event")){
+BuyEvoSeeds(){
+    if !(CheckSetting("EvoSeeds", "EvoSeeds")){
         return 0
     }
-    PlayerStatus("Going to Event Shop!", "0x22e6a8",,false,,false)
-    if !DetectShop("Event"){
+
+    PlayerStatus("Going to EvoSeeds Shop!", "0x22e6a8",,false,,false)
+
+    searchItem("Event Latern")
+    clickItem("Event Latern", "Event Latern")
+
+    Sleep(1500)
+    Send("{" Ekey "}")
+    clickOption(2,5)
+    if !DetectShop("EvoSeeds"){
         return 0 
     }
-    buyShop(getItems("Event"), "Event")
+    buyShop(getItems("EvoSeeds"), "EvoSeeds")
     CloseClutter()
     return 1
 }
 
 
+; BuyfallGears(){
+;     if !(CheckSetting("fallGears", "fallGears")){
+;         return 0
+;     }
+;     PlayerStatus("Going to fallGears Shop!", "0x22e6a8",,false,,false)
+;     if !DetectShop("fallGears"){
+;         return 0 
+;     }
+;     buyShop(getItems("fallGears"), "fallGears")
+;     CloseClutter()
+;     return 1
+; }
+
+; BuyfallPets(){
+;     if !(CheckSetting("fallPets", "fallPets")){
+;         return 0
+;     }
+;     PlayerStatus("Going to fallPets Shop!", "0x22e6a8",,false,,false)
+;     if !DetectShop("fallPets"){
+;         return 0 
+;     }
+;     buyShop(getItems("fallPets"), "fallPets")
+;     CloseClutter()
+;     return 1
+; }
+
+
+; BuyfallCosmetics(){
+;     if !(CheckSetting("fallCosmetics", "fallCosmetics")){
+;         return 0
+;     }
+;     PlayerStatus("Going to fallCosmetics Shop!", "0x22e6a8",,false,,false)
+;     if !DetectShop("fallCosmetics"){
+;         return 0 
+;     }
+;     buyShop(getItems("fallCosmetics"), "fallCosmetics")
+;     CloseClutter()
+;     return 1
+; }
 
 
 

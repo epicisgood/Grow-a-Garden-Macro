@@ -1,7 +1,6 @@
-
 #Requires AutoHotkey v2.0
 
-version := "v1.2.2"
+version := "v1.2.3"
 settingsFile := "settings.ini"
 
 
@@ -9,22 +8,20 @@ settingsFile := "settings.ini"
 
 
 if (A_IsCompiled) {
-	; WebViewCtrl.CreateFileFromResource((A_PtrSize * 4) "bit\WebView2Loader.dll", WebViewCtrl.TempDir)
-    ; WebViewSettings := {DllPath: WebViewCtrl.TempDir "\" (A_PtrSize * 4) "bit\WebView2Loader.dll"}
-
 	WebViewCtrl.CreateFileFromResource((A_PtrSize * 8) "bit\WebView2Loader.dll", WebViewCtrl.TempDir)
     WebViewSettings := {DllPath: WebViewCtrl.TempDir "\" (A_PtrSize * 8) "bit\WebView2Loader.dll"}
+    guipath := A_WorkingDir
 } else {
     WebViewSettings := {}
     TraySetIcon("images\\GameIcon.ico")
+    guipath := ''
 }
 
 
-
-
 MyWindow := WebViewGui("-Resize -Caption ",,,WebViewSettings) ; ignore error it somehow works with it.....
+MyWindow.Navigate(guipath "\scripts\Gui\index.html")
 MyWindow.OnEvent("Close", (*) => StopMacro())
-MyWindow.Navigate("scripts/Gui/index.html")
+; MyWindow.Navigate("scripts/Gui/index.html")
 MyWindow.AddHostObjectToScript("ButtonClick", { func: WebButtonClickEvent })
 MyWindow.AddHostObjectToScript("Save", { func: SaveSettings })
 MyWindow.AddHostObjectToScript("ReadSettings", { func: SendSettings })
@@ -137,7 +134,10 @@ SaveSettings(settingsJson) {
         "Egg2Items", "Eggs2",
         "GearCraftingItems", "GearCrafting",
         "SeedCraftingItems", "SeedCrafting",
-        "EventItems", "Events",
+        "EvoSeedsItems", "EvoSeeds",
+        ; "fallCosmeticsItems", "fallCosmetics",
+        ; "fallGearsItems", "fallGears",
+        ; "fallPetsItems", "fallPets",
     )
 
     for groupName, sectionName in sectionMap {
@@ -166,7 +166,10 @@ SendSettings(){
     
     SeedCraftingItems := getItems("SeedCrafting")
     
-    EventItems := getItems("Events")
+    EvoSeedsItems := getItems("EvoSeeds")
+    ; fallCosmeticsItems := getItems("fallCosmetics")
+    ; fallGearsItems := getItems("fallGears")
+    ; fallPetsItems := getItems("fallPets")
 
     seedItems.Push("Seeds")
     seed2Items.Push("Seeds2")
@@ -175,7 +178,10 @@ SendSettings(){
     Egg2Items.Push("Eggs2")
     GearCraftingItems.Push("GearCrafting")
     SeedCraftingItems.Push("SeedCrafting")
-    EventItems.Push("Events")
+    EvoSeedsItems.Push("EvoSeeds")
+    ; fallCosmeticsItems.Push("fallCosmetics")
+    ; fallGearsItems.Push("fallGears")
+    ; fallPetsItems.Push("fallPets")
 
 
     if (!FileExist(settingsFile)) {
@@ -208,9 +214,18 @@ SendSettings(){
         for i in SeedCraftingItems {
             IniWrite("0", settingsFile, "SeedCrafting", StrReplace(i, " ", ""))
         }
-        for i in EventItems {
-            IniWrite("0", settingsFile, "Events", StrReplace(i, " ", ""))
+        for i in EvoSeedsItems {
+            IniWrite("0", settingsFile, "EvoSeeds", StrReplace(i, " ", ""))
         }
+        ; for i in fallCosmeticsItems {
+        ;     IniWrite("0", settingsFile, "fallCosmetics", StrReplace(i, " ", ""))
+        ; }
+        ; for i in fallGearsItems {
+        ;     IniWrite("0", settingsFile, "fallGears", StrReplace(i, " ", ""))
+        ; }
+        ; for i in fallPetsItems {
+        ;     IniWrite("0", settingsFile, "fallPets", StrReplace(i, " ", ""))
+        ; }
         Sleep(200)
     }
 
@@ -241,7 +256,10 @@ SendSettings(){
       , EggItems:  Map()
       , GearCraftingItems: Map()
       , SeedCraftingItems: Map()
-      , EventItems: Map()
+      , EvoSeedsItems: Map()
+    ;   , fallCosmeticsItems: Map()
+    ;   , fallGearsItems: Map()
+    ;   , fallPetsItems: Map()
     }
 
     for item in seedItems {
@@ -292,12 +310,30 @@ SendSettings(){
         SettingsJson.GearCraftingItems[key] := value
     }
 
-    for item in EventItems {
+    for item in EvoSeedsItems {
         key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "Events", key, "0")
-        IniWrite(value, settingsFile, "Events", key)
-        SettingsJson.EventItems[key] := value
+        value := IniRead(settingsFile, "EvoSeeds", key, "0")
+        IniWrite(value, settingsFile, "EvoSeeds", key)
+        SettingsJson.EvoSeedsItems[key] := value
     }
+    ; for item in fallCosmeticsItems {
+    ;     key := StrReplace(item, " ", "")
+    ;     value := IniRead(settingsFile, "fallCosmetics", key, "0")
+    ;     IniWrite(value, settingsFile, "fallCosmetics", key)
+    ;     SettingsJson.fallCosmeticsItems[key] := value
+    ; }
+    ; for item in fallGearsItems {
+    ;     key := StrReplace(item, " ", "")
+    ;     value := IniRead(settingsFile, "fallGears", key, "0")
+    ;     IniWrite(value, settingsFile, "fallGears", key)
+    ;     SettingsJson.fallGearsItems[key] := value
+    ; }
+    ; for item in fallPetsItems {
+    ;     key := StrReplace(item, " ", "")
+    ;     value := IniRead(settingsFile, "fallPets", key, "0")
+    ;     IniWrite(value, settingsFile, "fallPets", key)
+    ;     SettingsJson.fallPetsItems[key] := value
+    ; }
 
 
 	MyWindow.PostWebMessageAsJson(JSON.stringify(SettingsJson))

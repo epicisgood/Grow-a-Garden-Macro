@@ -5,8 +5,6 @@ function switchTab(tabId) {
 
 
 
-
-
 let cachedData = null;
 
 async function fetchAllItems() {
@@ -40,7 +38,10 @@ async function onSaveClick() {
 
   const SeedCraftingItems = await getItems("SeedCrafting");
 
-  const EventItems = await getItems("Events");
+  const EvoSeedsItems = await getItems("EvoSeeds");
+  // const fallCosmeticsItems = await getItems("fallCosmetics");
+  // const fallGearsItems = await getItems("fallGears");
+  // const fallPetsItems = await getItems("fallPets");
 
   seedItems.push("Seeds");
   seed2Items.push("Seeds2");
@@ -49,7 +50,10 @@ async function onSaveClick() {
   Egg2Items.push("Eggs2");
   GearCraftingItems.push("GearCrafting");
   SeedCraftingItems.push("SeedCrafting");
-  EventItems.push("Events");
+  EvoSeedsItems.push("EvoSeeds");
+  // fallCosmeticsItems.push("fallCosmetics");
+  // fallGearsItems.push("fallGears");
+  // fallPetsItems.push("fallPets");
 
   const cfg = {
     url: document.getElementById('url').value,
@@ -67,7 +71,10 @@ async function onSaveClick() {
     Egg2Items: {},
     GearCraftingItems: {},
     SeedCraftingItems: {},
-    EventItems: {},
+    EvoSeedsItems: {},
+    // fallCosmeticsItems: {},
+    // fallGearsItems: {},
+    // fallPetsItems: {},
   };
 
   const allLists = {
@@ -78,7 +85,10 @@ async function onSaveClick() {
     Egg2Items,
     GearCraftingItems,
     SeedCraftingItems,
-    EventItems,
+    EvoSeedsItems,
+    // fallCosmeticsItems,
+    // fallGearsItems,
+    // fallPetsItems,
   };
 
   for (const [listName, items] of Object.entries(allLists)) {
@@ -118,7 +128,10 @@ function applySettings(a) {
       Egg2Items: s.Egg2Items,
       GearCraftingItems: s.GearCraftingItems,
       SeedCraftingItems: s.SeedCraftingItems,
-      EventItems: s.EventItems,
+      EvoSeedsItems: s.EvoSeedsItems,
+      // fallCosmeticsItems: s.fallCosmeticsItems,
+      // fallGearsItems: s.fallGearsItems,
+      // fallPetsItems: s.fallPetsItems,
     };
 
     for (const [listName, items] of Object.entries(allItems)) {
@@ -137,7 +150,8 @@ function applySettings(a) {
 
 async function AddHtml() {
   const categories = [
-    "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "GearCrafting", "SeedCrafting", "Events"
+    "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "GearCrafting", "SeedCrafting", "EvoSeeds"
+    // "fallPets", 'fallGears', "fallCosmetics"
     ];
 
   for (const category of categories) {
@@ -189,7 +203,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       checkboxes.forEach(cb => {
         const isSelectAll = cb.classList.contains("SelectAll");
-        const isEnableCheckbox = ["Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "Events"].includes(cb.id);
+        const isEnableCheckbox = [
+          "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "EvoSeeds", 
+          // "fallPets", 'fallGears', "fallCosmetics"
+        ].includes(cb.id);
         if (!isSelectAll && !isEnableCheckbox) {
           cb.checked = selectAllCheckbox.checked;
         }
