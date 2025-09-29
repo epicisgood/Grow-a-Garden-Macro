@@ -1774,8 +1774,8 @@ BuyEvoSeeds(){
 
     PlayerStatus("Going to EvoSeeds Shop!", "0x22e6a8",,false,,false)
 
-    searchItem("Event Latern")
-    clickItem("Event Latern", "Event Latern")
+    searchItem("Event Lantern")
+    clickItem("Event Lantern", "Event Lantern")
 
     Sleep(1500)
     Walk(500, Akey)
