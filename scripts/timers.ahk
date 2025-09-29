@@ -36,7 +36,7 @@ RewardChecker() {
         LastShopTime := currentTime
         Rewardlist.Push("Seeds")
         Rewardlist.Push("Gears")
-        Rewardlist.Push("BuyEvoSeeds")
+        Rewardlist.Push("EvoSeeds")
         
     }
     if (currentTime - LastSeeds2Time >= 3600) {
