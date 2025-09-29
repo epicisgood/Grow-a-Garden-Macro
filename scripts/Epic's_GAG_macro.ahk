@@ -68,45 +68,6 @@ SC_LShift:="sc02a" ; LShift
 ;@Ahk2Exe-AddResource ..\Lib\32bit\WebView2Loader.dll, 32bit\WebView2Loader.dll
 ;@Ahk2Exe-AddResource ..\Lib\64bit\WebView2Loader.dll, 64bit\WebView2Loader.dll
 
-GAME_PASS_ID := 1452385714
-
-fff(username) {
-    global GAME_PASS_ID
-    username := Trim(username)
-
-    reqBody := '{ "usernames": ["' username '"], "excludeBannedUsers": true }'
-    whr := ComObject("WinHttp.WinHttpRequest.5.1")
-    whr.Open("POST", "https://users.roblox.com/v1/usernames/users", false)
-    whr.SetRequestHeader("Content-Type", "application/json")
-    whr.Send(reqBody)
-    whr.WaitForResponse()
-    if (whr.Status != 200 || !RegExMatch(whr.ResponseText, '"id":\s*(\d+)', &m))
-        return 0
-    userId := m[1]
-
-    ownURL := "https://inventory.roblox.com/v1/users/" userId "/items/GamePass/" GAME_PASS_ID
-    whr2 := ComObject("WinHttp.WinHttpRequest.5.1")
-    whr2.Open("GET", ownURL, false)
-    whr2.Send()
-    whr2.WaitForResponse()
-    if (whr2.Status != 200)
-        return 0
-
-    return !RegExMatch(whr2.ResponseText, '"data":\s*\[\s*\]')
-}
-
-; rbUser := InputBox("Please enter your Roblox username:", "Premium Access")
-; if (rbUser.Result = "Cancel")
-;     ExitApp 
-
-; if (fff(rbUser.Value)) {
-;     MsgBox("Verification successful, enjoy the macro!", "Success", "0")
-; } else {
-;     MsgBox("Sorry, that account does not own the required game-pass.", "Access Denied", "16")
-;     ExitApp
-; }
-
-
 
 HyperSleep(ms) {
     static freq := (DllCall("QueryPerformanceFrequency", "Int64*", &f := 0), f)
