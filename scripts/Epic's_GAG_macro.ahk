@@ -1738,8 +1738,10 @@ BuyEvoSeeds(){
     clickItem("Event Lantern", "Event Lantern")
 
     Sleep(1500)
-  ;  Walk(500, Akey)
-  ;  Sleep(500)
+    Loop 2 {
+        Send("{WheelDown}")
+        Sleep 50
+    }
     Send("{" Ekey "}")
     clickOption(2,5)
     if !DetectShop("EvoSeeds"){
