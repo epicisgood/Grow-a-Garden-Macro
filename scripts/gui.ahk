@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.2.3"
+version := "v1.2.4"
 settingsFile := "settings.ini"
 
 
@@ -134,7 +134,7 @@ SaveSettings(settingsJson) {
         "Egg2Items", "Eggs2",
         "GearCraftingItems", "GearCrafting",
         "SeedCraftingItems", "SeedCrafting",
-        "EvoSeedsItems", "EvoSeeds",
+        ; "EvoSeedsItems", "EvoSeeds",
         ; "fallCosmeticsItems", "fallCosmetics",
         ; "fallGearsItems", "fallGears",
         ; "fallPetsItems", "fallPets",
@@ -166,7 +166,7 @@ SendSettings(){
     
     SeedCraftingItems := getItems("SeedCrafting")
     
-    EvoSeedsItems := getItems("EvoSeeds")
+    ; EvoSeedsItems := getItems("EvoSeeds")
     ; fallCosmeticsItems := getItems("fallCosmetics")
     ; fallGearsItems := getItems("fallGears")
     ; fallPetsItems := getItems("fallPets")
@@ -178,7 +178,7 @@ SendSettings(){
     Egg2Items.Push("Eggs2")
     GearCraftingItems.Push("GearCrafting")
     SeedCraftingItems.Push("SeedCrafting")
-    EvoSeedsItems.Push("EvoSeeds")
+    ; EvoSeedsItems.Push("EvoSeeds")
     ; fallCosmeticsItems.Push("fallCosmetics")
     ; fallGearsItems.Push("fallGears")
     ; fallPetsItems.Push("fallPets")
@@ -214,9 +214,9 @@ SendSettings(){
         for i in SeedCraftingItems {
             IniWrite("0", settingsFile, "SeedCrafting", StrReplace(i, " ", ""))
         }
-        for i in EvoSeedsItems {
-            IniWrite("0", settingsFile, "EvoSeeds", StrReplace(i, " ", ""))
-        }
+        ; for i in EvoSeedsItems {
+        ;     IniWrite("0", settingsFile, "EvoSeeds", StrReplace(i, " ", ""))
+        ; }
         ; for i in fallCosmeticsItems {
         ;     IniWrite("0", settingsFile, "fallCosmetics", StrReplace(i, " ", ""))
         ; }
@@ -256,7 +256,7 @@ SendSettings(){
       , EggItems:  Map()
       , GearCraftingItems: Map()
       , SeedCraftingItems: Map()
-      , EvoSeedsItems: Map()
+    ;   , EvoSeedsItems: Map()
     ;   , fallCosmeticsItems: Map()
     ;   , fallGearsItems: Map()
     ;   , fallPetsItems: Map()
@@ -310,12 +310,12 @@ SendSettings(){
         SettingsJson.GearCraftingItems[key] := value
     }
 
-    for item in EvoSeedsItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "EvoSeeds", key, "0")
-        IniWrite(value, settingsFile, "EvoSeeds", key)
-        SettingsJson.EvoSeedsItems[key] := value
-    }
+    ; for item in EvoSeedsItems {
+    ;     key := StrReplace(item, " ", "")
+    ;     value := IniRead(settingsFile, "EvoSeeds", key, "0")
+    ;     IniWrite(value, settingsFile, "EvoSeeds", key)
+    ;     SettingsJson.EvoSeedsItems[key] := value
+    ; }
     ; for item in fallCosmeticsItems {
     ;     key := StrReplace(item, " ", "")
     ;     value := IniRead(settingsFile, "fallCosmetics", key, "0")

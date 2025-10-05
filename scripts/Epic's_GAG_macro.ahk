@@ -674,7 +674,7 @@ Crafting(Recipeitems, settingName, Names){
             ; }
             Sleep(1000)
             Send("{f}")
-            Sleep(500)
+            Sleep(1000)
             Send("{" Ekey "}")
             Send("{" Ekey "}")
             Sleep(1000)
@@ -1062,7 +1062,6 @@ initShops(){
             global LastShopTime := nowUnix()
             BuySeeds()
             BuyGears()
-            BuyEvoSeeds()
             Shopinit := false
         }
     } else if (Egginit == true){
@@ -1318,20 +1317,15 @@ GearCraft(){
     Send("{" WKey " up}")
     Sleep(1000)
     GearRecipe := [
-        { Name: "Lightning Rod", Materials: ["Basic Sprinkler", "Advanced Sprinkler", "Godly Sprinkler"], CraftTime: 2700 },
-        { Name: "Tanning Mirror", Materials: ["Basic Sprinkler", "Advanced Sprinkler", "Godly Sprinkler"], CraftTime: 2700 },
-        { Name: "Reclaimer", Materials: ["Common Egg", "Harvest Tool"], CraftTime: 1500 },
-        { Name: "Event Lantern", Materials: ["Recall Wrench", "Apple kg"], CraftTime: 10 },
-        { Name: "Mutation Spray Glimmering", Materials: ["Cleaning Spray", "Orange Tulip Seed", "Daffodil Seed", "Mango kg"], CraftTime: 900 },
-        { Name: "Stalk Sprout Sprinkler", Materials: ["Bamboo kg", "Beanstalk kg", "Mushroom kg", "Advanced Sprinkler"], CraftTime: 3600 },
-        { Name: "Mutation Spray Choc", Materials: ["Cleaning Spray", "Cacao kg"], CraftTime: 720 },
-        { Name: "Mutation Spray Chilled", Materials: ["Cleaning Spray", "Godly Sprinkler"], CraftTime: 300 },
-        { Name: "Mutation Spray Shocked", Materials: ["Cleaning Spray", "Lightning Rod"], CraftTime: 1800 },
-        { Name: "Anti Bee Egg", Materials: ["Bee Egg"], CraftTime: 7200 },
-        { Name: "Small Toy", Materials: ["Common Egg", "Coconut Seed", "Coconut kg"], CraftTime: 600 },
-        { Name: "Small Treat", Materials: ["Common Egg", "Dragon Fruit Seed", "Blueberry kg"], CraftTime: 600 },
-        { Name: "Pet Pouch", Materials: ["Common Egg", "Corndog fd", "Small Pet Treat", "Small Pet Toy"], CraftTime: 1800 },
-        { Name: "Pack Bee", Materials: ["Anti Bee Egg", "Sunflower kg", "Purple Dahila kg"], CraftTime: 14400 },
+        { Name: "Lightning Rod", Materials: ["Poop"], CraftTime: 2700 },
+        { Name: "Tanning Mirror", Materials: ["Poop"], CraftTime: 2700 },
+        { Name: "Reclaimer", Materials: ["Poop"], CraftTime: 1500 },
+        { Name: "Event Lantern", Materials: ["Poop"], CraftTime: 10 },
+        { Name: "Anti Bee Egg", Materials: ["Poop"], CraftTime: 7200 },
+        { Name: "Small Toy", Materials: ["Poop"], CraftTime: 600 },
+        { Name: "Small Treat", Materials: ["Poop"], CraftTime: 600 },
+        { Name: "Pet Pouch", Materials: ["Poop"], CraftTime: 1800 },
+        { Name: "Pack Bee", Materials: ["Poop"], CraftTime: 14400 },
         
         
     ]
@@ -1362,13 +1356,11 @@ SeedCraft(){
     Send("{" WKey " up}")
     Sleep(1000)
     SeedRecipe := [
-        { Name: "Mandrake", Materials: ["Carrot Seed", "Beanstalk kg", "Common Egg"], CraftTime: 300 },
-        { Name: "Twisted Tangle", Materials: ["Cactus Seed", "Bamboo Seed", "Cactus kg", "Mango kg"], CraftTime: 900 },
-        { Name: "Veinpetal", Materials: ["Orange Tulip Seed", "Daffodil Seed", "Beanstalk kg", "Burning bud kg"], CraftTime: 1200 },
-        { Name: "Horsetail", Materials: ["Daffodil Seed", "Bamboo kg", "Corn kg"], CraftTime: 900 },
-        { Name: "Lingonberry", Materials: ["Blueberry Seed", "Blueberry Seed", "Blueberry Seed", "Horsetail kg"], CraftTime: 900 },
-        { Name: "Amber Spine", Materials: ["Cactus Seed", "Pumpkin kg", "Horsetail kg"], CraftTime: 1800 },        
-        
+        { Name: "Mandrake", Materials: ["Poop"], CraftTime: 300 },
+        { Name: "Evo Apple I", Materials: ["Poop"], CraftTime: 600 },        
+        { Name: "Evo Apple II", Materials: ["Poop"], CraftTime: 1200 },        
+        { Name: "Evo Apple III", Materials: ["Poop"], CraftTime: 1800 },        
+        { Name: "Evo Apple IV", Materials: ["Poop"], CraftTime: 2400 },        
     ]
     SeedNames := getItems("SeedCrafting")
 
@@ -1500,7 +1492,6 @@ MainLoop() {
     BuyGears()
     BuyEggs()
     BuyEggs2()
-    BuyEvoSeeds()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1543,7 +1534,7 @@ ShowToolTip(){
     global LastSeeds2Time
     global LastEggs2Time
     global LastEggsTime
-    global LastEvoSeedsTime
+    ; global LastEvoSeedsTime
     ; global LastfallCosmeticsTime
     ; global LastfallGearsTime
     ; global LastfallPetsTime
@@ -1560,7 +1551,7 @@ ShowToolTip(){
     static Eggs2Enabled := IniRead(settingsFile, "Eggs2", "Eggs2") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    static EvoSeedsEnabled := IniRead(settingsFile, "EvoSeeds", "EvoSeeds") + 0
+    ; static EvoSeedsEnabled := IniRead(settingsFile, "EvoSeeds", "EvoSeeds") + 0
     ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
     ; static fallGearsEnabled := IniRead(settingsFile, "fallGears", "fallGears") + 0
     ; static fallPetsEnabled := IniRead(settingsFile, "fallPets", "fallPets") + 0
@@ -1590,11 +1581,11 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    if (EvoSeedsEnabled) {
-        static EvoSeedsTime := 300
-        EvoSeedsRemaining := Max(0, EvoSeedsTime - (currentTime - LastShopTime))
-        tooltipText .= "EvoSeeds: " (EvoSeedsRemaining // 60) ":" Format("{:02}", Mod(EvoSeedsRemaining, 60)) "`n"
-    }
+    ; if (EvoSeedsEnabled) {
+    ;     static EvoSeedsTime := 300
+    ;     EvoSeedsRemaining := Max(0, EvoSeedsTime - (currentTime - LastShopTime))
+    ;     tooltipText .= "EvoSeeds: " (EvoSeedsRemaining // 60) ":" Format("{:02}", Mod(EvoSeedsRemaining, 60)) "`n"
+    ; }
     ; if (fallCosmeticsEnabled) {
     ;     static fallCosmeticsTime := 3600
     ;     fallCosmeticsRemaining := Max(0, fallCosmeticsTime - (currentTime - LastfallCosmeticsTime))
@@ -1727,28 +1718,28 @@ CookingEvent(){
 
 
 
-BuyEvoSeeds(){
-    if !(CheckSetting("EvoSeeds", "EvoSeeds")){
-        return 0
-    }
+; BuyEvoSeeds(){
+;     if !(CheckSetting("EvoSeeds", "EvoSeeds")){
+;         return 0
+;     }
 
-    PlayerStatus("Going to EvoSeeds Shop!", "0x22e6a8",,false,,false)
+;     PlayerStatus("Going to EvoSeeds Shop!", "0x22e6a8",,false,,false)
 
-    searchItem("Event Lantern")
-    clickItem("Event Lantern", "Event Lantern")
+;     searchItem("Event Lantern")
+;     clickItem("Event Lantern", "Event Lantern")
 
-    Sleep(1500)
-    Walk(500, Akey)
-    Sleep(500)
-    Send("{" Ekey "}")
-    clickOption(2,5)
-    if !DetectShop("EvoSeeds"){
-        return 0 
-    }
-    buyShop(getItems("EvoSeeds"), "EvoSeeds")
-    CloseClutter()
-    return 1
-}
+;     Sleep(1500)
+;     Walk(500, Akey)
+;     Sleep(500)
+;     Send("{" Ekey "}")
+;     clickOption(2,5)
+;     if !DetectShop("EvoSeeds"){
+;         return 0 
+;     }
+;     buyShop(getItems("EvoSeeds"), "EvoSeeds")
+;     CloseClutter()
+;     return 1
+; }
 
 
 ; BuyfallGears(){

@@ -38,7 +38,7 @@ async function onSaveClick() {
 
   const SeedCraftingItems = await getItems("SeedCrafting");
 
-  const EvoSeedsItems = await getItems("EvoSeeds");
+  // const EvoSeedsItems = await getItems("EvoSeeds");
   // const fallCosmeticsItems = await getItems("fallCosmetics");
   // const fallGearsItems = await getItems("fallGears");
   // const fallPetsItems = await getItems("fallPets");
@@ -50,7 +50,7 @@ async function onSaveClick() {
   Egg2Items.push("Eggs2");
   GearCraftingItems.push("GearCrafting");
   SeedCraftingItems.push("SeedCrafting");
-  EvoSeedsItems.push("EvoSeeds");
+  // EvoSeedsItems.push("EvoSeeds");
   // fallCosmeticsItems.push("fallCosmetics");
   // fallGearsItems.push("fallGears");
   // fallPetsItems.push("fallPets");
@@ -71,7 +71,7 @@ async function onSaveClick() {
     Egg2Items: {},
     GearCraftingItems: {},
     SeedCraftingItems: {},
-    EvoSeedsItems: {},
+    // EvoSeedsItems: {},
     // fallCosmeticsItems: {},
     // fallGearsItems: {},
     // fallPetsItems: {},
@@ -85,7 +85,7 @@ async function onSaveClick() {
     Egg2Items,
     GearCraftingItems,
     SeedCraftingItems,
-    EvoSeedsItems,
+    // EvoSeedsItems,
     // fallCosmeticsItems,
     // fallGearsItems,
     // fallPetsItems,
@@ -128,7 +128,7 @@ function applySettings(a) {
       Egg2Items: s.Egg2Items,
       GearCraftingItems: s.GearCraftingItems,
       SeedCraftingItems: s.SeedCraftingItems,
-      EvoSeedsItems: s.EvoSeedsItems,
+      // EvoSeedsItems: s.EvoSeedsItems,
       // fallCosmeticsItems: s.fallCosmeticsItems,
       // fallGearsItems: s.fallGearsItems,
       // fallPetsItems: s.fallPetsItems,
@@ -150,8 +150,8 @@ function applySettings(a) {
 
 async function AddHtml() {
   const categories = [
-    "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "GearCrafting", "SeedCrafting", "EvoSeeds"
-    // "fallPets", 'fallGears', "fallCosmetics"
+    "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "GearCrafting", "SeedCrafting"
+    // , "EvoSeeds", "fallPets", 'fallGears', "fallCosmetics"
     ];
 
   for (const category of categories) {
@@ -204,8 +204,8 @@ document.addEventListener("DOMContentLoaded", () => {
       checkboxes.forEach(cb => {
         const isSelectAll = cb.classList.contains("SelectAll");
         const isEnableCheckbox = [
-          "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "EvoSeeds", 
-          // "fallPets", 'fallGears', "fallCosmetics"
+          "Seeds", "Seeds2", "Gears", "Eggs","Eggs2"
+          // , "EvoSeeds", "fallPets", 'fallGears', "fallCosmetics"
         ].includes(cb.id);
         if (!isSelectAll && !isEnableCheckbox) {
           cb.checked = selectAllCheckbox.checked;

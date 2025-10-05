@@ -7,7 +7,7 @@ LastShopTime := nowUnix()
 LastSeeds2Time := nowUnix()
 LastEggs2Time := nowUnix()
 LastEggsTime := nowUnix()
-LastEvoSeedsTime := nowUnix()
+; LastEvoSeedsTime := nowUnix()
 ; LastfallCosmeticsTime := nowUnix()
 ; LastfallGearsTime := nowUnix()
 ; LastfallPetsTime := nowUnix()
@@ -21,9 +21,8 @@ LastCookingTime := nowUnix()
 LastCosmetics := nowUnix()
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastSeeds2Time, LastEggsTime, LastCosmetics, LastMerchantTime, LastEggs2Time,
-    LastEvoSeedsTime 
-    ; , LastfallPetsTime, lastfallGearsTime, LastfallCosmeticsTime
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastSeeds2Time, LastEggsTime, LastCosmetics, LastMerchantTime, LastEggs2Time
+    ; ,LastEvoSeedsTime , LastfallPetsTime, lastfallGearsTime, LastfallCosmeticsTime
 
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
@@ -36,7 +35,7 @@ RewardChecker() {
         LastShopTime := currentTime
         Rewardlist.Push("Seeds")
         Rewardlist.Push("Gears")
-        Rewardlist.Push("EvoSeeds")
+        ; Rewardlist.Push("EvoSeeds")
         
     }
     if (currentTime - LastSeeds2Time >= 3600) {
@@ -107,9 +106,9 @@ RewardInterupt() {
         if (v = "Eggs2") {
             BuyEggs2()
         }
-        if (v = "EvoSeeds"){
-            BuyEvoSeeds()
-        }
+        ; if (v = "EvoSeeds"){
+        ;     BuyEvoSeeds()
+        ; }
         ; if (v = "fallCosmetics"){
         ;     BuyfallCosmetics()
         ; }
