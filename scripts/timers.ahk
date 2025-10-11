@@ -7,10 +7,10 @@ LastShopTime := nowUnix()
 LastSeeds2Time := nowUnix()
 LastEggs2Time := nowUnix()
 LastEggsTime := nowUnix()
-; LastEvoSeedsTime := nowUnix()
+; LastSpookySeedsTime := nowUnix()
 ; LastfallCosmeticsTime := nowUnix()
-; LastfallGearsTime := nowUnix()
-; LastfallPetsTime := nowUnix()
+; LastDevillishDecorTime := nowUnix()
+; LastCreepyCrittersTime := nowUnix()
 LastMerchantTime := nowUnix()
 
 LastGearCraftingTime := nowUnix()
@@ -22,7 +22,7 @@ LastCosmetics := nowUnix()
 
 RewardChecker() {
     global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastSeeds2Time, LastEggsTime, LastCosmetics, LastMerchantTime, LastEggs2Time
-    ; ,LastEvoSeedsTime , LastfallPetsTime, lastfallGearsTime, LastfallCosmeticsTime
+    ; ,LastSpookySeedsTime , LastCreepyCrittersTime, lastDevillishDecorTime, LastfallCosmeticsTime
 
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
 
@@ -35,7 +35,7 @@ RewardChecker() {
         LastShopTime := currentTime
         Rewardlist.Push("Seeds")
         Rewardlist.Push("Gears")
-        ; Rewardlist.Push("EvoSeeds")
+        ; Rewardlist.Push("SpookySeeds")
         
     }
     if (currentTime - LastSeeds2Time >= 3600) {
@@ -54,13 +54,13 @@ RewardChecker() {
     ;     LastfallCosmeticsTime := currentTime
     ;     Rewardlist.Push("fallCosmetics")
     ; }
-    ; if (currentTime - LastfallGearsTime >= 3600) {
-    ;     LastfallGearsTime := currentTime
-    ;     Rewardlist.Push("fallGears")
+    ; if (currentTime - LastDevillishDecorTime >= 3600) {
+    ;     LastDevillishDecorTime := currentTime
+    ;     Rewardlist.Push("DevillishDecor")
     ; }
-    ; if (currentTime - LastfallPetsTime >= 3600) {
-    ;     LastfallPetsTime := currentTime
-    ;     Rewardlist.Push("fallPets")
+    ; if (currentTime - LastCreepyCrittersTime >= 3600) {
+    ;     LastCreepyCrittersTime := currentTime
+    ;     Rewardlist.Push("CreepyCritters")
     ; }
     if (currentTime - LastMerchantTime >= 3600) {
         LastMerchantTime := currentTime
@@ -106,17 +106,17 @@ RewardInterupt() {
         if (v = "Eggs2") {
             BuyEggs2()
         }
-        ; if (v = "EvoSeeds"){
-        ;     BuyEvoSeeds()
+        ; if (v = "SpookySeeds"){
+        ;     BuySpookySeeds()
         ; }
         ; if (v = "fallCosmetics"){
         ;     BuyfallCosmetics()
         ; }
-        ; if (v = "fallGears"){
-        ;     BuyfallGears()
+        ; if (v = "DevillishDecor"){
+        ;     BuyDevillishDecor()
         ; }
-        ; if (v = "fallPets"){
-        ;     BuyfallPets()
+        ; if (v = "CreepyCritters"){
+        ;     BuyCreepyCritters()
         ; }
         if (v = "GearCrafting") {
             GearCraft()

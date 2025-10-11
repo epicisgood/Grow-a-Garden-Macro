@@ -134,10 +134,10 @@ SaveSettings(settingsJson) {
         "Egg2Items", "Eggs2",
         "GearCraftingItems", "GearCrafting",
         "SeedCraftingItems", "SeedCrafting",
-        ; "EvoSeedsItems", "EvoSeeds",
+        ; "SpookySeedsItems", "SpookySeeds",
         ; "fallCosmeticsItems", "fallCosmetics",
-        ; "fallGearsItems", "fallGears",
-        ; "fallPetsItems", "fallPets",
+        ; "DevillishDecorItems", "DevillishDecor",
+        ; "CreepyCrittersItems", "CreepyCritters",
     )
 
     for groupName, sectionName in sectionMap {
@@ -166,10 +166,10 @@ SendSettings(){
     
     SeedCraftingItems := getItems("SeedCrafting")
     
-    ; EvoSeedsItems := getItems("EvoSeeds")
+    ; SpookySeedsItems := getItems("SpookySeeds")
     ; fallCosmeticsItems := getItems("fallCosmetics")
-    ; fallGearsItems := getItems("fallGears")
-    ; fallPetsItems := getItems("fallPets")
+    ; DevillishDecorItems := getItems("DevillishDecor")
+    ; CreepyCrittersItems := getItems("CreepyCritters")
 
     seedItems.Push("Seeds")
     seed2Items.Push("Seeds2")
@@ -178,10 +178,10 @@ SendSettings(){
     Egg2Items.Push("Eggs2")
     GearCraftingItems.Push("GearCrafting")
     SeedCraftingItems.Push("SeedCrafting")
-    ; EvoSeedsItems.Push("EvoSeeds")
+    ; SpookySeedsItems.Push("SpookySeeds")
     ; fallCosmeticsItems.Push("fallCosmetics")
-    ; fallGearsItems.Push("fallGears")
-    ; fallPetsItems.Push("fallPets")
+    ; DevillishDecorItems.Push("DevillishDecor")
+    ; CreepyCrittersItems.Push("CreepyCritters")
 
 
     if (!FileExist(settingsFile)) {
@@ -214,17 +214,17 @@ SendSettings(){
         for i in SeedCraftingItems {
             IniWrite("0", settingsFile, "SeedCrafting", StrReplace(i, " ", ""))
         }
-        ; for i in EvoSeedsItems {
-        ;     IniWrite("0", settingsFile, "EvoSeeds", StrReplace(i, " ", ""))
+        ; for i in SpookySeedsItems {
+        ;     IniWrite("0", settingsFile, "SpookySeeds", StrReplace(i, " ", ""))
         ; }
         ; for i in fallCosmeticsItems {
         ;     IniWrite("0", settingsFile, "fallCosmetics", StrReplace(i, " ", ""))
         ; }
-        ; for i in fallGearsItems {
-        ;     IniWrite("0", settingsFile, "fallGears", StrReplace(i, " ", ""))
+        ; for i in DevillishDecorItems {
+        ;     IniWrite("0", settingsFile, "DevillishDecor", StrReplace(i, " ", ""))
         ; }
-        ; for i in fallPetsItems {
-        ;     IniWrite("0", settingsFile, "fallPets", StrReplace(i, " ", ""))
+        ; for i in CreepyCrittersItems {
+        ;     IniWrite("0", settingsFile, "CreepyCritters", StrReplace(i, " ", ""))
         ; }
         Sleep(200)
     }
@@ -256,10 +256,10 @@ SendSettings(){
       , EggItems:  Map()
       , GearCraftingItems: Map()
       , SeedCraftingItems: Map()
-    ;   , EvoSeedsItems: Map()
+    ;   , SpookySeedsItems: Map()
     ;   , fallCosmeticsItems: Map()
-    ;   , fallGearsItems: Map()
-    ;   , fallPetsItems: Map()
+    ;   , DevillishDecorItems: Map()
+    ;   , CreepyCrittersItems: Map()
     }
 
     for item in seedItems {
@@ -310,11 +310,11 @@ SendSettings(){
         SettingsJson.GearCraftingItems[key] := value
     }
 
-    ; for item in EvoSeedsItems {
+    ; for item in SpookySeedsItems {
     ;     key := StrReplace(item, " ", "")
-    ;     value := IniRead(settingsFile, "EvoSeeds", key, "0")
-    ;     IniWrite(value, settingsFile, "EvoSeeds", key)
-    ;     SettingsJson.EvoSeedsItems[key] := value
+    ;     value := IniRead(settingsFile, "SpookySeeds", key, "0")
+    ;     IniWrite(value, settingsFile, "SpookySeeds", key)
+    ;     SettingsJson.SpookySeedsItems[key] := value
     ; }
     ; for item in fallCosmeticsItems {
     ;     key := StrReplace(item, " ", "")
@@ -322,17 +322,17 @@ SendSettings(){
     ;     IniWrite(value, settingsFile, "fallCosmetics", key)
     ;     SettingsJson.fallCosmeticsItems[key] := value
     ; }
-    ; for item in fallGearsItems {
+    ; for item in DevillishDecorItems {
     ;     key := StrReplace(item, " ", "")
-    ;     value := IniRead(settingsFile, "fallGears", key, "0")
-    ;     IniWrite(value, settingsFile, "fallGears", key)
-    ;     SettingsJson.fallGearsItems[key] := value
+    ;     value := IniRead(settingsFile, "DevillishDecor", key, "0")
+    ;     IniWrite(value, settingsFile, "DevillishDecor", key)
+    ;     SettingsJson.DevillishDecorItems[key] := value
     ; }
-    ; for item in fallPetsItems {
+    ; for item in CreepyCrittersItems {
     ;     key := StrReplace(item, " ", "")
-    ;     value := IniRead(settingsFile, "fallPets", key, "0")
-    ;     IniWrite(value, settingsFile, "fallPets", key)
-    ;     SettingsJson.fallPetsItems[key] := value
+    ;     value := IniRead(settingsFile, "CreepyCritters", key, "0")
+    ;     IniWrite(value, settingsFile, "CreepyCritters", key)
+    ;     SettingsJson.CreepyCrittersItems[key] := value
     ; }
 
 

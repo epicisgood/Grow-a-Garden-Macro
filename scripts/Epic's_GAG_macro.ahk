@@ -747,11 +747,8 @@ buyShop(itemList, itemType, crafting := false){
     } else {
         pos := 0.835
     }
-    if (itemType == "Seeds") {
-        tierHandler(1,"Seeds")
-    } else if (itemType == "Seeds2"){
-        tierHandler(2,"Seeds")
-    } else if (itemType == "Eggs"){
+    
+    if (itemType == "Eggs"){
         tierHandler(1,"Eggs")
     } else if (itemType == "Eggs2"){
         tierHandler(2,"Eggs")
@@ -1534,10 +1531,10 @@ ShowToolTip(){
     global LastSeeds2Time
     global LastEggs2Time
     global LastEggsTime
-    ; global LastEvoSeedsTime
+    ; global LastSpookySeedsTime
     ; global LastfallCosmeticsTime
-    ; global LastfallGearsTime
-    ; global LastfallPetsTime
+    ; global LastDevillishDecorTime
+    ; global LastCreepyCrittersTime
     global LastMerchantTime
     global LastGearCraftingTime
     global LastSeedCraftingTime
@@ -1551,10 +1548,10 @@ ShowToolTip(){
     static Eggs2Enabled := IniRead(settingsFile, "Eggs2", "Eggs2") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    ; static EvoSeedsEnabled := IniRead(settingsFile, "EvoSeeds", "EvoSeeds") + 0
+    ; static SpookySeedsEnabled := IniRead(settingsFile, "SpookySeeds", "SpookySeeds") + 0
     ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
-    ; static fallGearsEnabled := IniRead(settingsFile, "fallGears", "fallGears") + 0
-    ; static fallPetsEnabled := IniRead(settingsFile, "fallPets", "fallPets") + 0
+    ; static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
+    ; static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
     static gearCraftingEnabled := IniRead(settingsFile, "GearCrafting", "GearCrafting") + 0
     static seedCraftingEnabled := IniRead(settingsFile, "SeedCrafting", "SeedCrafting") + 0
     static cosmeticEnabled := IniRead(settingsFile, "Settings", "Cosmetics") + 0
@@ -1581,25 +1578,25 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    ; if (EvoSeedsEnabled) {
-    ;     static EvoSeedsTime := 300
-    ;     EvoSeedsRemaining := Max(0, EvoSeedsTime - (currentTime - LastShopTime))
-    ;     tooltipText .= "EvoSeeds: " (EvoSeedsRemaining // 60) ":" Format("{:02}", Mod(EvoSeedsRemaining, 60)) "`n"
+    ; if (SpookySeedsEnabled) {
+    ;     static SpookySeedsTime := 300
+    ;     SpookySeedsRemaining := Max(0, SpookySeedsTime - (currentTime - LastShopTime))
+    ;     tooltipText .= "SpookySeeds: " (SpookySeedsRemaining // 60) ":" Format("{:02}", Mod(SpookySeedsRemaining, 60)) "`n"
     ; }
     ; if (fallCosmeticsEnabled) {
     ;     static fallCosmeticsTime := 3600
     ;     fallCosmeticsRemaining := Max(0, fallCosmeticsTime - (currentTime - LastfallCosmeticsTime))
     ;     tooltipText .= "fallCosmetics: " (fallCosmeticsRemaining // 60) ":" Format("{:02}", Mod(fallCosmeticsRemaining, 60)) "`n"
     ; }
-    ; if (fallGearsEnabled) {
-    ;     static fallGearsTime := 3600
-    ;     fallGearsRemaining := Max(0, fallGearsTime - (currentTime - LastfallGearsTime))
-    ;     tooltipText .= "fallGears: " (fallGearsRemaining // 60) ":" Format("{:02}", Mod(fallGearsRemaining, 60)) "`n"
+    ; if (DevillishDecorEnabled) {
+    ;     static DevillishDecorTime := 3600
+    ;     DevillishDecorRemaining := Max(0, DevillishDecorTime - (currentTime - LastDevillishDecorTime))
+    ;     tooltipText .= "DevillishDecor: " (DevillishDecorRemaining // 60) ":" Format("{:02}", Mod(DevillishDecorRemaining, 60)) "`n"
     ; }
-    ; if (fallPetsEnabled) {
-    ;     static fallPetsTime := 3600
-    ;     fallPetsRemaining := Max(0, fallPetsTime - (currentTime - LastfallPetsTime))
-    ;     tooltipText .= "fallPets: " (fallPetsRemaining // 60) ":" Format("{:02}", Mod(fallPetsRemaining, 60)) "`n"
+    ; if (CreepyCrittersEnabled) {
+    ;     static CreepyCrittersTime := 3600
+    ;     CreepyCrittersRemaining := Max(0, CreepyCrittersTime - (currentTime - LastCreepyCrittersTime))
+    ;     tooltipText .= "CreepyCritters: " (CreepyCrittersRemaining // 60) ":" Format("{:02}", Mod(CreepyCrittersRemaining, 60)) "`n"
     ; }
     if (EggsEnabled) {
         static EggTime := 1800
@@ -1718,12 +1715,12 @@ CookingEvent(){
 
 
 
-; BuyEvoSeeds(){
-;     if !(CheckSetting("EvoSeeds", "EvoSeeds")){
+; BuySpookySeeds(){
+;     if !(CheckSetting("SpookySeeds", "SpookySeeds")){
 ;         return 0
 ;     }
 
-;     PlayerStatus("Going to EvoSeeds Shop!", "0x22e6a8",,false,,false)
+;     PlayerStatus("Going to SpookySeeds Shop!", "0x22e6a8",,false,,false)
 
 ;     searchItem("Event Lantern")
 ;     clickItem("Event Lantern", "Event Lantern")
@@ -1733,37 +1730,37 @@ CookingEvent(){
 ;     Sleep(500)
 ;     Send("{" Ekey "}")
 ;     clickOption(2,5)
-;     if !DetectShop("EvoSeeds"){
+;     if !DetectShop("SpookySeeds"){
 ;         return 0 
 ;     }
-;     buyShop(getItems("EvoSeeds"), "EvoSeeds")
+;     buyShop(getItems("SpookySeeds"), "SpookySeeds")
 ;     CloseClutter()
 ;     return 1
 ; }
 
 
-; BuyfallGears(){
-;     if !(CheckSetting("fallGears", "fallGears")){
+; BuyDevillishDecor(){
+;     if !(CheckSetting("DevillishDecor", "DevillishDecor")){
 ;         return 0
 ;     }
-;     PlayerStatus("Going to fallGears Shop!", "0x22e6a8",,false,,false)
-;     if !DetectShop("fallGears"){
+;     PlayerStatus("Going to DevillishDecor Shop!", "0x22e6a8",,false,,false)
+;     if !DetectShop("DevillishDecor"){
 ;         return 0 
 ;     }
-;     buyShop(getItems("fallGears"), "fallGears")
+;     buyShop(getItems("DevillishDecor"), "DevillishDecor")
 ;     CloseClutter()
 ;     return 1
 ; }
 
-; BuyfallPets(){
-;     if !(CheckSetting("fallPets", "fallPets")){
+; BuyCreepyCritters(){
+;     if !(CheckSetting("CreepyCritters", "CreepyCritters")){
 ;         return 0
 ;     }
-;     PlayerStatus("Going to fallPets Shop!", "0x22e6a8",,false,,false)
-;     if !DetectShop("fallPets"){
+;     PlayerStatus("Going to CreepyCritters Shop!", "0x22e6a8",,false,,false)
+;     if !DetectShop("CreepyCritters"){
 ;         return 0 
 ;     }
-;     buyShop(getItems("fallPets"), "fallPets")
+;     buyShop(getItems("CreepyCritters"), "CreepyCritters")
 ;     CloseClutter()
 ;     return 1
 ; }
