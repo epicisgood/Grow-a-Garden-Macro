@@ -29,31 +29,27 @@ async function getItemJSON(category) {
 
 async function onSaveClick() {
   const seedItems = await getItems("Seeds");
-  const seed2Items = await getItems("Seeds2");
   const gearItems = await getItems("Gears");
   const EggItems = await getItems("Eggs");
-  const Egg2Items = await getItems("Eggs2");
 
   const GearCraftingItems = await getItems("GearCrafting");
 
   const SeedCraftingItems = await getItems("SeedCrafting");
 
-  // const SpookySeedsItems = await getItems("SpookySeeds");
+  const SpookySeedsItems = await getItems("SpookySeeds");
   // const fallCosmeticsItems = await getItems("fallCosmetics");
-  // const DevillishDecorItems = await getItems("DevillishDecor");
-  // const CreepyCrittersItems = await getItems("CreepyCritters");
+  const DevillishDecorItems = await getItems("DevillishDecor");
+  const CreepyCrittersItems = await getItems("CreepyCritters");
 
   seedItems.push("Seeds");
-  seed2Items.push("Seeds2");
   gearItems.push("Gears");
   EggItems.push("Eggs");
-  Egg2Items.push("Eggs2");
   GearCraftingItems.push("GearCrafting");
   SeedCraftingItems.push("SeedCrafting");
-  // SpookySeedsItems.push("SpookySeeds");
+  SpookySeedsItems.push("SpookySeeds");
   // fallCosmeticsItems.push("fallCosmetics");
-  // DevillishDecorItems.push("DevillishDecor");
-  // CreepyCrittersItems.push("CreepyCritters");
+  DevillishDecorItems.push("DevillishDecor");
+  CreepyCrittersItems.push("CreepyCritters");
 
   const cfg = {
     url: document.getElementById('url').value,
@@ -65,30 +61,28 @@ async function onSaveClick() {
     SearchList:  document.getElementById('SearchList').value,
     CookingTime:  document.getElementById('CookingTime').value,
     seedItems: {},
-    seed2Items: {},
+    // seed2Items: {},
     gearItems: {},
     EggItems: {},
-    Egg2Items: {},
     GearCraftingItems: {},
     SeedCraftingItems: {},
-    // SpookySeedsItems: {},
+    SpookySeedsItems: {},
     // fallCosmeticsItems: {},
-    // DevillishDecorItems: {},
-    // CreepyCrittersItems: {},
+    DevillishDecorItems: {},
+    CreepyCrittersItems: {},
   };
 
   const allLists = {
     seedItems,
-    seed2Items,
+    // seed2Items,
     gearItems,
     EggItems,
-    Egg2Items,
     GearCraftingItems,
     SeedCraftingItems,
-    // SpookySeedsItems,
+    SpookySeedsItems,
     // fallCosmeticsItems,
-    // DevillishDecorItems,
-    // CreepyCrittersItems,
+    DevillishDecorItems,
+    CreepyCrittersItems,
   };
 
   for (const [listName, items] of Object.entries(allLists)) {
@@ -122,16 +116,15 @@ function applySettings(a) {
 
     const allItems = {
       SeedItems: s.SeedItems,
-      Seed2Items: s.Seed2Items,
+      // Seed2Items: s.Seed2Items,
       GearItems: s.GearItems,
       EggItems: s.EggItems,
-      Egg2Items: s.Egg2Items,
       GearCraftingItems: s.GearCraftingItems,
       SeedCraftingItems: s.SeedCraftingItems,
-      // SpookySeedsItems: s.SpookySeedsItems,
+      SpookySeedsItems: s.SpookySeedsItems,
       // fallCosmeticsItems: s.fallCosmeticsItems,
-      // DevillishDecorItems: s.DevillishDecorItems,
-      // CreepyCrittersItems: s.CreepyCrittersItems,
+      DevillishDecorItems: s.DevillishDecorItems,
+      CreepyCrittersItems: s.CreepyCrittersItems,
     };
 
     for (const [listName, items] of Object.entries(allItems)) {
@@ -150,8 +143,8 @@ function applySettings(a) {
 
 async function AddHtml() {
   const categories = [
-    "Seeds", "Seeds2", "Gears", "Eggs","Eggs2", "GearCrafting", "SeedCrafting"
-    // , "SpookySeeds", "CreepyCritters", 'DevillishDecor', "fallCosmetics"
+    "Seeds", "Gears", "Eggs", "GearCrafting", "SeedCrafting", "SpookySeeds", "CreepyCritters", 'DevillishDecor'
+    // , "fallCosmetics"
     ];
 
   for (const category of categories) {
@@ -204,8 +197,8 @@ document.addEventListener("DOMContentLoaded", () => {
       checkboxes.forEach(cb => {
         const isSelectAll = cb.classList.contains("SelectAll");
         const isEnableCheckbox = [
-          "Seeds", "Seeds2", "Gears", "Eggs","Eggs2"
-          // , "SpookySeeds", "CreepyCritters", 'DevillishDecor', "fallCosmetics"
+          "Seeds", "Gears", "Eggs", "SpookySeeds", "CreepyCritters", 'DevillishDecor'
+          // , "fallCosmetics"
         ].includes(cb.id);
         if (!isSelectAll && !isEnableCheckbox) {
           cb.checked = selectAllCheckbox.checked;

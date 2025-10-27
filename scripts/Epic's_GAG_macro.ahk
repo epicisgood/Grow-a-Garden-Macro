@@ -742,17 +742,12 @@ CheckStock(index, list, crafting := false){
 }
 
 buyShop(itemList, itemType, crafting := false){
-    if (itemType == "Event" || itemType == "Eggs" || itemType == "Eggs2"){
+    if (itemType == "Event" || itemType == "Eggs" || itemType == "Gears"){
         pos := 0.8
     } else {
         pos := 0.835
     }
     
-    if (itemType == "Eggs"){
-        tierHandler(1,"Eggs")
-    } else if (itemType == "Eggs2"){
-        tierHandler(2,"Eggs")
-    }
 
     for (item in itemlist){
         if (A_index == 1){
@@ -781,21 +776,16 @@ buyShop(itemList, itemType, crafting := false){
         } else {
             relativeMouseMove(0.4,pos)
         }
-        if (A_index >= 16 && itemType == "Gears"){
-        ; if (A_index >= 18 && itemType != "Seeds"){
-            ; if ((A_Index - 19) / 8 == 0.5){
-            ;     ScrollDown(0.75)
-            ;     Sleep(250)
-            ; } else {
-            ;     ScrollDown(0.25  + (A_Index - 19) / 8)
-            ;     Sleep(250)
-            ; }
-            ScrollDown(0.25)
+        if (A_index >= 8 && itemType == "Gears"){
+            ScrollDown(0.25 + (A_Index * 0.06))
             Sleep(250)
         }
         Click
         Sleep(350)
-        if (A_Index >= 23 && itemType != "Seeds") {
+        if (A_Index >= 10 && itemType == "Gears") {
+            ScrollDown(0.25 + (A_Index * 0.08))
+            Sleep(250)
+        } else if (A_Index >= 23 && itemType != "Seeds") {
             ScrollDown(0.25)
             Sleep(250)
         }
@@ -932,87 +922,6 @@ CloseShop(crafting := false){
 
 }
 
-clickTierSeeds(tier){
-    capX := windowX + windowWidth * 0.60
-    capY := windowY + windowHeight * 0.15
-    capW := windowWidth * 0.38
-    capH := windowHeight * 0.25
-    varation := 60
-    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton2"], &OutputList, , , , , varation,,7 || Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton"], &OutputList, , , , , varation,,7) = 1)) {
-        Cords := StrSplit(OutputList, ",")
-         if (tier == 1) {
-            x := Cords[1] + capX * 1.1
-            y := Cords[2] + capY * 1.7
-            if A_ScreenWidth == 800 {
-                x := 613
-                y := 226
-            }
-        } else if (tier == 2) {
-            x := Cords[1] + capX * 1.1
-            y := Cords[2] + capY * 1.85
-            if windowHeight == 1080 {
-                x := 1430
-                y := 431
-            }
-        }
-        MouseMove(x, y)
-        Sleep(50)
-        Click
-        Sleep(500)
-        click
-        Gdip_DisposeImage(pBMScreen)
-        return true
-    }
-    Gdip_DisposeImage(pBMScreen)
-    return false
-}
-
-clickTierEggs(tier){
-    capX := windowX + windowWidth * 0.60
-    capY := windowY + windowHeight * 0.15
-    capW := windowWidth * 0.38
-    capH := windowHeight * 0.25
-    varation := 60
-    pBMScreen := Gdip_BitmapFromScreen(capX "|" capY "|" capW "|" capH)
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton2"], &OutputList, , , , , varation,,7 || Gdip_ImageSearch(pBMScreen, bitmaps["Xbutton"], &OutputList, , , , , varation,,7) = 1)) {
-        Cords := StrSplit(OutputList, ",")
-        if (tier == 1) {
-            x := Cords[1] + capX * 1.05
-            y := Cords[2] + capY * 1.675
-        } else if (tier == 2) {
-            x := Cords[1] + capX * 1.05
-            y := Cords[2] + capY * 2
-        }
-        MouseMove(x, y)
-        Sleep(50)
-        Click
-        Gdip_DisposeImage(pBMScreen)
-        return true
-    }
-    Gdip_DisposeImage(pBMScreen)
-    return false
-}
-
-tierHandler(tier, type){
-    loop 15 {
-        Sleep(500)
-        if (type == "Seeds"){
-            if (clickTierSeeds(tier)){
-                Sleep(500)
-                return true
-            }
-        }
-        if (type == "Eggs"){
-            if (clickTierEggs(tier)){
-                Sleep(500)
-                return true
-            }
-        }
-    }
-    return false
-
-}
 
 CloseClutter(){
     Clickbutton("Xbutton")
@@ -1049,8 +958,6 @@ getItems(item){
 
 initShops(){
     static Shopinit := true
-    static Seeds2init := true
-    static Eggs2init := true
     static Egginit := true
     static Merchantinit := true
     static Cosemticinit := true
@@ -1081,19 +988,7 @@ initShops(){
             BuyCosmetics()
             Cosemticinit := false
         }
-    } else if (Seeds2init == true){
-        if (A_min < 5) {
-            global LastSeeds2 := nowUnix()
-            BuySeeds2()
-            Seeds2init := false
-        }
-    } else if (Eggs2init == true){
-        if (A_Min == 22 || A_Min == 52) {
-            global LastEggs2 := nowUnix()
-            BuyEggs2()
-            Eggs2init := false
-        }
-    }
+    } 
 
 
 }
@@ -1115,30 +1010,6 @@ BuySeeds(){
             continue
         }
         buyShop(seedItems, "Seeds")
-        CloseClutter()
-        return 1
-    }
-    PlayerStatus("Failed to buy seeds 3 times, CLOSING ROBLOX!", "0x001a12")
-    CloseRoblox()
-}
-
-BuySeeds2(){
-    seedItems := getItems("Seeds2")
-    if !(CheckSetting("Seeds2", "Seeds2")){
-        return
-    }
-    loop 3 {
-        PlayerStatus("Going to buy Tier 2 Seeds!", "0x22e6a8",,false,,false)
-        relativeMouseMove(0.5, 0.5)
-        Sleep(500)
-        Clickbutton("Seeds")
-        Sleep(1000)
-        Send("{" Ekey "}")
-        if !DetectShop("Tier 2 Seeds"){
-            CameraCorrection()
-            continue
-        }
-        buyShop(seedItems, "Seeds2")
         CloseClutter()
         return 1
     }
@@ -1208,35 +1079,6 @@ BuyEggs(){
             continue
         }
         buyShop(eggitems, "Eggs")
-        CloseClutter()
-        return 1
-    }
-}
-BuyEggs2(){
-    if !(CheckSetting("Eggs2", "Eggs2")){
-        return
-    }
-    eggitems := getItems("Eggs2")
-    loop 3 {
-        PlayerStatus("Going to buy Eggs Tier 2!", "0x22e6a8",,false,,false)
-        ActivateRoblox()
-        Clickbutton("Garden")
-        Sleep(500)
-        Send("1")
-        MouseMove windowX + windowWidth//2, windowY + windowHeight//2
-        Click
-        Sleep(2000)
-        Send("{s Down}")
-        HyperSleep(600)
-        Send("{s Up}")
-        Sleep(1500)
-        Send("{" Ekey "}")
-        clickOption(1,6)
-        if !DetectShop("egg tier 2"){
-            CameraCorrection()
-            continue
-        }
-        buyShop(eggitems, "Eggs2")
         CloseClutter()
         return 1
     }
@@ -1485,10 +1327,8 @@ MainLoop() {
     CameraCorrection()
     CookingEvent()
     BuySeeds()
-    BuySeeds2()
     BuyGears()
     BuyEggs()
-    BuyEggs2()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1528,13 +1368,11 @@ MainLoop() {
 
 ShowToolTip(){
     global LastShopTime
-    global LastSeeds2Time
-    global LastEggs2Time
     global LastEggsTime
-    ; global LastSpookySeedsTime
+    global LastSpookySeedsTime
     ; global LastfallCosmeticsTime
-    ; global LastDevillishDecorTime
-    ; global LastCreepyCrittersTime
+    global LastDevillishDecorTime
+    global LastCreepyCrittersTime
     global LastMerchantTime
     global LastGearCraftingTime
     global LastSeedCraftingTime
@@ -1544,14 +1382,12 @@ ShowToolTip(){
     global SeedCraftingTime
 
     static SeedsEnabled := IniRead(settingsFile, "Seeds", "Seeds") + 0
-    static Seeds2Enabled := IniRead(settingsFile, "Seeds2", "Seeds2") + 0
-    static Eggs2Enabled := IniRead(settingsFile, "Eggs2", "Eggs2") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    ; static SpookySeedsEnabled := IniRead(settingsFile, "SpookySeeds", "SpookySeeds") + 0
+    static SpookySeedsEnabled := IniRead(settingsFile, "SpookySeeds", "SpookySeeds") + 0
     ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
-    ; static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
-    ; static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
+    static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
+    static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
     static gearCraftingEnabled := IniRead(settingsFile, "GearCrafting", "GearCrafting") + 0
     static seedCraftingEnabled := IniRead(settingsFile, "SeedCrafting", "SeedCrafting") + 0
     static cosmeticEnabled := IniRead(settingsFile, "Settings", "Cosmetics") + 0
@@ -1567,46 +1403,37 @@ ShowToolTip(){
         SeedRemaining := Max(0, SeedTime - (currentTime - LastShopTime))
         tooltipText .= "Seeds: " (SeedRemaining // 60) ":" Format("{:02}", Mod(SeedRemaining, 60)) "`n"
     }
-    if (Seeds2Enabled) {
-        static Seed2Time := 3600
-        Seed2Remaining := Max(0, Seed2Time - (currentTime - LastSeeds2Time))
-        tooltipText .= "Seeds T2: " (Seed2Remaining // 60) ":" Format("{:02}", Mod(Seed2Remaining, 60)) "`n"
-    }
+
 
     if (GearsEnabled) {
         static GearTime := 300
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    ; if (SpookySeedsEnabled) {
-    ;     static SpookySeedsTime := 300
-    ;     SpookySeedsRemaining := Max(0, SpookySeedsTime - (currentTime - LastShopTime))
-    ;     tooltipText .= "SpookySeeds: " (SpookySeedsRemaining // 60) ":" Format("{:02}", Mod(SpookySeedsRemaining, 60)) "`n"
-    ; }
+    if (SpookySeedsEnabled) {
+        static SpookySeedsTime := 300
+        SpookySeedsRemaining := Max(0, SpookySeedsTime - (currentTime - LastShopTime))
+        tooltipText .= "SpookySeeds: " (SpookySeedsRemaining // 60) ":" Format("{:02}", Mod(SpookySeedsRemaining, 60)) "`n"
+    }
     ; if (fallCosmeticsEnabled) {
     ;     static fallCosmeticsTime := 3600
     ;     fallCosmeticsRemaining := Max(0, fallCosmeticsTime - (currentTime - LastfallCosmeticsTime))
     ;     tooltipText .= "fallCosmetics: " (fallCosmeticsRemaining // 60) ":" Format("{:02}", Mod(fallCosmeticsRemaining, 60)) "`n"
     ; }
-    ; if (DevillishDecorEnabled) {
-    ;     static DevillishDecorTime := 3600
-    ;     DevillishDecorRemaining := Max(0, DevillishDecorTime - (currentTime - LastDevillishDecorTime))
-    ;     tooltipText .= "DevillishDecor: " (DevillishDecorRemaining // 60) ":" Format("{:02}", Mod(DevillishDecorRemaining, 60)) "`n"
-    ; }
-    ; if (CreepyCrittersEnabled) {
-    ;     static CreepyCrittersTime := 3600
-    ;     CreepyCrittersRemaining := Max(0, CreepyCrittersTime - (currentTime - LastCreepyCrittersTime))
-    ;     tooltipText .= "CreepyCritters: " (CreepyCrittersRemaining // 60) ":" Format("{:02}", Mod(CreepyCrittersRemaining, 60)) "`n"
-    ; }
+    if (DevillishDecorEnabled) {
+        static DevillishDecorTime := 3600
+        DevillishDecorRemaining := Max(0, DevillishDecorTime - (currentTime - LastDevillishDecorTime))
+        tooltipText .= "DevillishDecor: " (DevillishDecorRemaining // 60) ":" Format("{:02}", Mod(DevillishDecorRemaining, 60)) "`n"
+    }
+    if (CreepyCrittersEnabled) {
+        static CreepyCrittersTime := 3600
+        CreepyCrittersRemaining := Max(0, CreepyCrittersTime - (currentTime - LastCreepyCrittersTime))
+        tooltipText .= "CreepyCritters: " (CreepyCrittersRemaining // 60) ":" Format("{:02}", Mod(CreepyCrittersRemaining, 60)) "`n"
+    }
     if (EggsEnabled) {
         static EggTime := 1800
         EggRemaining := Max(0, EggTime - (currentTime - LastEggsTime))
         tooltipText .= "Eggs: " (EggRemaining // 60) ":" Format("{:02}", Mod(EggRemaining, 60)) "`n"
-    }
-    if (Eggs2Enabled) {
-        static Egg2Time := 1800
-        Egg2Remaining := Max(0, Egg2Time - (currentTime - LastEggs2Time))
-        tooltipText .= "Eggs T2: " (Egg2Remaining // 60) ":" Format("{:02}", Mod(Egg2Remaining, 60)) "`n"
     }
     if (CookingEnabled) {
         static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
@@ -1715,55 +1542,77 @@ CookingEvent(){
 
 
 
-; BuySpookySeeds(){
-;     if !(CheckSetting("SpookySeeds", "SpookySeeds")){
-;         return 0
-;     }
+BuySpookySeeds(){
+    if !(CheckSetting("SpookySeeds", "SpookySeeds")){
+        return 0
+    }
 
-;     PlayerStatus("Going to SpookySeeds Shop!", "0x22e6a8",,false,,false)
+    PlayerStatus("Going to SpookySeeds Shop!", "0x22e6a8",,false,,false)
 
-;     searchItem("Event Lantern")
-;     clickItem("Event Lantern", "Event Lantern")
+    ; searchItem("Event Lantern")
+    ; clickItem("Event Lantern", "Event Lantern")
 
-;     Sleep(1500)
-;     Walk(500, Akey)
-;     Sleep(500)
-;     Send("{" Ekey "}")
-;     clickOption(2,5)
-;     if !DetectShop("SpookySeeds"){
-;         return 0 
-;     }
-;     buyShop(getItems("SpookySeeds"), "SpookySeeds")
-;     CloseClutter()
-;     return 1
-; }
+    Sleep(1500)
+    Walk(600, Skey)
+    Sleep(500)
+    Walk(3100, Akey)
+    Sleep(500)
+    Walk(750, Wkey)
+    Sleep(500)
+    Send("{" Ekey "}")
+    if !DetectShop("SpookySeeds"){
+        return 0 
+    }
+    buyShop(getItems("SpookySeeds"), "SpookySeeds")
+    CloseClutter()
+    return 1
+}
 
 
-; BuyDevillishDecor(){
-;     if !(CheckSetting("DevillishDecor", "DevillishDecor")){
-;         return 0
-;     }
-;     PlayerStatus("Going to DevillishDecor Shop!", "0x22e6a8",,false,,false)
-;     if !DetectShop("DevillishDecor"){
-;         return 0 
-;     }
-;     buyShop(getItems("DevillishDecor"), "DevillishDecor")
-;     CloseClutter()
-;     return 1
-; }
+BuyDevillishDecor(){
+    if !(CheckSetting("DevillishDecor", "DevillishDecor")){
+        return 0
+    }
+    PlayerStatus("Going to DevillishDecor Shop!", "0x22e6a8",,false,,false)
 
-; BuyCreepyCritters(){
-;     if !(CheckSetting("CreepyCritters", "CreepyCritters")){
-;         return 0
-;     }
-;     PlayerStatus("Going to CreepyCritters Shop!", "0x22e6a8",,false,,false)
-;     if !DetectShop("CreepyCritters"){
-;         return 0 
-;     }
-;     buyShop(getItems("CreepyCritters"), "CreepyCritters")
-;     CloseClutter()
-;     return 1
-; }
+    searchItem("Event Lantern")
+    clickItem("Event Lantern", "Event Lantern")
+
+    Sleep(1500)
+    Walk(600, Skey)
+    Sleep(500)
+    Walk(1750, Akey)
+    Send("{" Ekey "}")
+    if !DetectShop("DevillishDecor"){
+        return 0 
+    }
+    buyShop(getItems("DevillishDecor"), "DevillishDecor")
+    CloseClutter()
+    return 1
+}
+
+BuyCreepyCritters(){
+    if !(CheckSetting("CreepyCritters", "CreepyCritters")){
+        return 0
+    }
+    PlayerStatus("Going to CreepyCritters Shop!", "0x22e6a8",,false,,false)
+
+    searchItem("Event Lantern")
+    clickItem("Event Lantern", "Event Lantern")
+
+    Sleep(1500)
+    Walk(600, Skey)
+    Sleep(500)
+    Walk(1750, Akey)
+    Send("{" Ekey "}")
+
+    if !DetectShop("CreepyCritters"){
+        return 0 
+    }
+    buyShop(getItems("CreepyCritters"), "CreepyCritters")
+    CloseClutter()
+    return 1
+}
 
 
 ; BuyfallCosmetics(){
