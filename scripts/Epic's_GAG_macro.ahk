@@ -776,16 +776,9 @@ buyShop(itemList, itemType, crafting := false){
         } else {
             relativeMouseMove(0.4,pos)
         }
-        if (A_index >= 8 && itemType == "Gears"){
-            ScrollDown(0.25 + (A_Index * 0.06))
-            Sleep(250)
-        }
         Click
         Sleep(350)
-        if (A_Index >= 10 && itemType == "Gears") {
-            ScrollDown(0.25 + (A_Index * 0.08))
-            Sleep(250)
-        } else if (A_Index >= 23 && itemType != "Seeds") {
+        if (A_Index >= 23 && itemType != "Seeds") {
             ScrollDown(0.25)
             Sleep(250)
         }
@@ -1073,7 +1066,7 @@ BuyEggs(){
         Send("{s Up}")
         Sleep(1500)
         Send("{" Ekey "}")
-        clickOption(1,6)
+        clickOption(1,4)
         if !DetectShop("egg"){
             CameraCorrection()
             continue
@@ -1329,6 +1322,7 @@ MainLoop() {
     BuySeeds()
     BuyGears()
     BuyEggs()
+    BuySafariShop()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1369,7 +1363,7 @@ MainLoop() {
 ShowToolTip(){
     global LastShopTime
     global LastEggsTime
-    global LastSpookySeedsTime
+    global LastSafariShopTime
     ; global LastfallCosmeticsTime
     global LastDevillishDecorTime
     global LastCreepyCrittersTime
@@ -1384,7 +1378,7 @@ ShowToolTip(){
     static SeedsEnabled := IniRead(settingsFile, "Seeds", "Seeds") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    static SpookySeedsEnabled := IniRead(settingsFile, "SpookySeeds", "SpookySeeds") + 0
+    static SafariShopEnabled := IniRead(settingsFile, "SafariShop", "SafariShop") + 0
     ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
     static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
     static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
@@ -1410,10 +1404,10 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    if (SpookySeedsEnabled) {
-        static SpookySeedsTime := 300
-        SpookySeedsRemaining := Max(0, SpookySeedsTime - (currentTime - LastShopTime))
-        tooltipText .= "SpookySeeds: " (SpookySeedsRemaining // 60) ":" Format("{:02}", Mod(SpookySeedsRemaining, 60)) "`n"
+    if (SafariShopEnabled) {
+        static SafariShopTime := 900
+        SafariShopRemaining := Max(0, SafariShopTime - (currentTime - LastSafariShopTime))
+        tooltipText .= "SafariShop: " (SafariShopRemaining // 60) ":" Format("{:02}", Mod(SafariShopRemaining, 60)) "`n"
     }
     ; if (fallCosmeticsEnabled) {
     ;     static fallCosmeticsTime := 3600
@@ -1542,28 +1536,25 @@ CookingEvent(){
 
 
 
-BuySpookySeeds(){
-    if !(CheckSetting("SpookySeeds", "SpookySeeds")){
+BuySafariShop(){
+    if !(CheckSetting("SafariShop", "SafariShop")){
         return 0
     }
 
-    PlayerStatus("Going to SpookySeeds Shop!", "0x22e6a8",,false,,false)
+    PlayerStatus("Going to SafariShop Shop!", "0x22e6a8",,false,,false)
 
-    ; searchItem("Event Lantern")
-    ; clickItem("Event Lantern", "Event Lantern")
-
-    Sleep(1500)
-    Walk(600, Skey)
+    searchItem("Event Lantern")
+    clickItem("Event Lantern", "Event Lantern")
     Sleep(500)
-    Walk(3100, Akey)
+    Walk(1200,Dkey)
     Sleep(500)
-    Walk(750, Wkey)
-    Sleep(500)
+    Walk(400,Wkey)
+    Sleep(1000)
     Send("{" Ekey "}")
-    if !DetectShop("SpookySeeds"){
+    if !DetectShop("SafariShop"){
         return 0 
     }
-    buyShop(getItems("SpookySeeds"), "SpookySeeds")
+    buyShop(getItems("SafariShop"), "SafariShop")
     CloseClutter()
     return 1
 }

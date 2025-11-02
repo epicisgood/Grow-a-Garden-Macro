@@ -5,7 +5,7 @@ nowUnix() {
 
 LastShopTime := nowUnix()
 LastEggsTime := nowUnix()
-LastSpookySeedsTime := nowUnix()
+LastSafariShopTime := nowUnix()
 ; LastfallCosmeticsTime := nowUnix()
 LastDevillishDecorTime := nowUnix()
 LastCreepyCrittersTime := nowUnix()
@@ -19,7 +19,7 @@ LastCookingTime := nowUnix()
 LastCosmetics := nowUnix()
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastEggsTime, LastCosmetics, LastMerchantTime ,LastSpookySeedsTime , LastCreepyCrittersTime, lastDevillishDecorTime
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastEggsTime, LastCosmetics, LastMerchantTime ,LastSafariShopTime , LastCreepyCrittersTime, lastDevillishDecorTime
     ; , LastfallCosmeticsTime
 
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
@@ -50,9 +50,9 @@ RewardChecker() {
         LastCreepyCrittersTime := currentTime
         Rewardlist.Push("CreepyCritters")
     }
-    if (currentTime - LastSpookySeedsTime >= 3600) {
-        LastSpookySeedsTime := currentTime
-        Rewardlist.Push("SpookySeeds")
+    if (currentTime - LastSafariShopTime >= 900) {
+        LastSafariShopTime := currentTime
+        Rewardlist.Push("SafariShop")
     }
     if (currentTime - LastMerchantTime >= 3600) {
         LastMerchantTime := currentTime
@@ -92,8 +92,8 @@ RewardInterupt() {
         if (v = "Eggs") {
             BuyEggs()
         }
-        if (v = "SpookySeeds"){
-            BuySpookySeeds()
+        if (v = "SafariShop"){
+            BuySafariShop()
         }
         ; if (v = "fallCosmetics"){
         ;     BuyfallCosmetics()
