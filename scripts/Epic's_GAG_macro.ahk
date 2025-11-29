@@ -652,27 +652,8 @@ Crafting(Recipeitems, settingName, Names){
             ; Choose to craft item
             buyShop(Names, settingName, true)
 
-            ; for Material in item.Materials {
-            ;     searchTerm := StrReplace(Material, " kg", "")
-            ;     searchTerm := StrReplace(searchTerm, " fd", "")
-            ;     searchItem(searchTerm)
-            ;     searchBitmap := searchTerm
-            ;     if RegExMatch(Material, " kg") {
-            ;         searchBitmap := "Bracket"
-            ;         clickCategory("Fruit")
-            ;     } else if RegExMatch(Material, "Seed") {
-            ;         searchBitmap := "Seed"
 
-            ;     } else if RegExMatch(Material, " fd") {
-            ;         clickCategory("Food")
-            ;     }
-            ;     clickItem(searchTerm, searchBitmap)
-            ;     Sleep(500)
-            ;     Send("{" Ekey "}")
-            ;     Send("{" Ekey "}")
-            ;     Sleep(500)
-            ; }
-            Sleep(1000)
+            Sleep(1500)
             Send("{f}")
             Sleep(1000)
             Send("{" Ekey "}")
@@ -781,7 +762,7 @@ buyShop(itemList, itemType, crafting := false){
         if (A_Index >= 23 && itemType != "Seeds") {
             ScrollDown(0.25)
             Sleep(250)
-        } else if ((A_Index >= 14 && itemType == "SafariShop")){
+        } else if ((A_Index >= 14 && itemType == "GearCrafting")){
             ScrollDown(0.25 + A_Index * 0.025)
             Sleep(250)
         }
@@ -1162,6 +1143,11 @@ GearCraft(){
         { Name: "Small Treat", Materials: ["Poop"], CraftTime: 600 },
         { Name: "Pet Pouch", Materials: ["Poop"], CraftTime: 1800 },
         { Name: "Pack Bee", Materials: ["Poop"], CraftTime: 14400 },
+        { Name: "Silver Ingot", Materials: ["Poop"], CraftTime: 60 },
+        { Name: "Gold Ingot", Materials: ["Poop"], CraftTime: 60 },
+        { Name: "Silver Piggy", Materials: ["Poop"], CraftTime: 1800 },
+        { Name: "Golden Piggy", Materials: ["Poop"], CraftTime: 2700 },
+        { Name: "Chimera Stone", Materials: ["Poop"], CraftTime: 3600 },
         
         
     ]
@@ -1197,6 +1183,9 @@ SeedCraft(){
         { Name: "Evo Apple II", Materials: ["Poop"], CraftTime: 1200 },        
         { Name: "Evo Apple III", Materials: ["Poop"], CraftTime: 1800 },        
         { Name: "Evo Apple IV", Materials: ["Poop"], CraftTime: 2400 },        
+        { Name: "Olive", Materials: ["Poop"], CraftTime: 900 },        
+        { Name: "Hollow Bamboo", Materials: ["Poop"], CraftTime: 2700 },        
+        { Name: "Yarrow", Materials: ["Poop"], CraftTime: 3600 },        
     ]
     SeedNames := getItems("SeedCrafting")
 
