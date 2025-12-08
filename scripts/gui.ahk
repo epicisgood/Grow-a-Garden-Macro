@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.2.8"
+version := "v1.2.9"
 settingsFile := "settings.ini"
 
 
@@ -132,7 +132,7 @@ SaveSettings(settingsJson) {
         "EggItems",  "Eggs",
         "GearCraftingItems", "GearCrafting",
         "SeedCraftingItems", "SeedCrafting",
-        "SafariShopItems", "SafariShop",
+        "SantasStashItems", "SantasStash",
         ; "fallCosmeticsItems", "fallCosmetics",
         "DevillishDecorItems", "DevillishDecor",
         "CreepyCrittersItems", "CreepyCritters",
@@ -162,7 +162,7 @@ SendSettings(){
     
     SeedCraftingItems := getItems("SeedCrafting")
     
-    SafariShopItems := getItems("SafariShop")
+    SantasStashItems := getItems("SantasStash")
     ; fallCosmeticsItems := getItems("fallCosmetics")
     DevillishDecorItems := getItems("DevillishDecor")
     CreepyCrittersItems := getItems("CreepyCritters")
@@ -172,7 +172,7 @@ SendSettings(){
     EggItems.Push("Eggs")
     GearCraftingItems.Push("GearCrafting")
     SeedCraftingItems.Push("SeedCrafting")
-    SafariShopItems.Push("SafariShop")
+    SantasStashItems.Push("SantasStash")
     ; fallCosmeticsItems.Push("fallCosmetics")
     DevillishDecorItems.Push("DevillishDecor")
     CreepyCrittersItems.Push("CreepyCritters")
@@ -202,8 +202,8 @@ SendSettings(){
         for i in SeedCraftingItems {
             IniWrite("0", settingsFile, "SeedCrafting", StrReplace(i, " ", ""))
         }
-        for i in SafariShopItems {
-            IniWrite("0", settingsFile, "SafariShop", StrReplace(i, " ", ""))
+        for i in SantasStashItems {
+            IniWrite("0", settingsFile, "SantasStash", StrReplace(i, " ", ""))
         }
         ; for i in fallCosmeticsItems {
         ;     IniWrite("0", settingsFile, "fallCosmetics", StrReplace(i, " ", ""))
@@ -243,7 +243,7 @@ SendSettings(){
       , EggItems:  Map()
       , GearCraftingItems: Map()
       , SeedCraftingItems: Map()
-      , SafariShopItems: Map()
+      , SantasStashItems: Map()
     ;   , fallCosmeticsItems: Map()
       , DevillishDecorItems: Map()
       , CreepyCrittersItems: Map()
@@ -285,11 +285,11 @@ SendSettings(){
         SettingsJson.GearCraftingItems[key] := value
     }
 
-    for item in SafariShopItems {
+    for item in SantasStashItems {
         key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "SafariShop", key, "0")
-        IniWrite(value, settingsFile, "SafariShop", key)
-        SettingsJson.SafariShopItems[key] := value
+        value := IniRead(settingsFile, "SantasStash", key, "0")
+        IniWrite(value, settingsFile, "SantasStash", key)
+        SettingsJson.SantasStashItems[key] := value
     }
     ; for item in fallCosmeticsItems {
     ;     key := StrReplace(item, " ", "")
