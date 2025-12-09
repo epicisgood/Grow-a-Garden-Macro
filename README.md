@@ -8,7 +8,7 @@ A macro for **Grow a Garden** that automatically buys your selected seeds, gear,
 
 > **Recall Wrench** is in the **first hotbar slot** but macro auto equips it
 
-<img width="450" height="500" alt="image" src="https://github.com/user-attachments/assets/9fd56197-a507-4b8a-a27c-5bbad9bfdefe" />
+<img width="450" height="500" alt="image" src="https://github.com/user-attachments/assets/9331c1db-9e93-4239-88a7-6e7bdc17c1d0" />
 
 
 ---
@@ -55,4 +55,5 @@ Need help extracting ZIPs or setting things up?
 ---
 
 🤑💵💸🐶
+
 
