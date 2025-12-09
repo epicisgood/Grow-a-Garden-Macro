@@ -587,6 +587,11 @@ ChangeCamera(type){
     HyperSleep(750)
     Send("{Tab}")
     HyperSleep(333)
+    loop 10 {
+        Send("{Up}")
+        Sleep(50)
+    }
+    Sleep(150)
     Send("{Down}")
     HyperSleep(333)
     Send("{Right}")
