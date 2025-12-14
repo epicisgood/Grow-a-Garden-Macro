@@ -2,7 +2,6 @@ nowUnix() {
     return DateDiff(A_NowUTC, "19700101000000", "Seconds")
 }
 
-
 LastShopTime := nowUnix()
 LastEggsTime := nowUnix()
 LastSantasStashTime := nowUnix()
@@ -19,7 +18,8 @@ LastCookingTime := nowUnix()
 LastCosmetics := nowUnix()
 
 RewardChecker() {
-    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastEggsTime, LastCosmetics, LastMerchantTime ,LastSantasStashTime , LastCreepyCrittersTime, lastDevillishDecorTime
+    global LastGearCraftingTime, EventCraftingtime, LastSeedCraftingTime, LastCookingTime, LastShopTime, LastEggsTime,
+        LastCosmetics, LastMerchantTime, LastSantasStashTime, LastCreepyCrittersTime, lastDevillishDecorTime
     ; , LastfallCosmeticsTime
 
     static CookingTime := Integer(IniRead(settingsFile, "Settings", "CookingTime") * 1.1)
@@ -28,11 +28,10 @@ RewardChecker() {
 
     currentTime := nowUnix()
 
-
     if (currentTime - LastShopTime >= 300) {
         LastShopTime := currentTime
         Rewardlist.Push("Seeds")
-        Rewardlist.Push("Gears")        
+        Rewardlist.Push("Gears")
     }
     if (currentTime - LastEggsTime >= 1800) {
         LastEggsTime := currentTime
@@ -50,7 +49,7 @@ RewardChecker() {
         LastCreepyCrittersTime := currentTime
         Rewardlist.Push("CreepyCritters")
     }
-    if (currentTime - LastSantasStashTime >= 3600) {
+    if (currentTime - LastSantasStashTime >= 1800) {
         LastSantasStashTime := currentTime
         Rewardlist.Push("SantasStash")
     }
@@ -66,7 +65,7 @@ RewardChecker() {
         Rewardlist.Push("GearCrafting")
     }
     if (currentTime - LastSeedCraftingTime >= SeedCraftingTime) {
-        Rewardlist.Push("SeedCrafting")   
+        Rewardlist.Push("SeedCrafting")
     }
     if (currentTime - LastCookingTime >= CookingTime) {
         Rewardlist.Push("Cooking")
@@ -92,16 +91,16 @@ RewardInterupt() {
         if (v = "Eggs") {
             BuyEggs()
         }
-        if (v = "SantasStash"){
+        if (v = "SantasStash") {
             BuySantasStash()
         }
         ; if (v = "fallCosmetics"){
         ;     BuyfallCosmetics()
         ; }
-        if (v = "DevillishDecor"){
+        if (v = "DevillishDecor") {
             BuyDevillishDecor()
         }
-        if (v = "CreepyCritters"){
+        if (v = "CreepyCritters") {
             BuyCreepyCritters()
         }
         if (v = "GearCrafting") {
@@ -129,12 +128,10 @@ RewardInterupt() {
             LastCookingTime := nowUnix()
         }
     }
-    
+
     if (variable.Length > 0) {
         Clickbutton("Garden")
         relativeMouseMove(0.5, 0.5)
         return 1
     }
 }
-
-
