@@ -46,7 +46,7 @@ RewardChecker() {
         LastDevillishDecorTime := currentTime
         Rewardlist.Push("DevillishDecor")
     }
-    if (currentTime - LastCreepyCrittersTime >= 3600) {
+    if (currentTime - LastCreepyCrittersTime >= 1800) {
         LastCreepyCrittersTime := currentTime
         Rewardlist.Push("CreepyCritters")
     }

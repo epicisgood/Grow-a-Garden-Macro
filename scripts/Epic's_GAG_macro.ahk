@@ -771,7 +771,7 @@ buyShop(itemList, itemType, crafting := false){
     } else if (itemType == "SantasStash"){
         pos := 0.835
     } else {
-        pos := 0.925
+        pos := 0.9
     }
     
 
@@ -1444,7 +1444,7 @@ ShowToolTip(){
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
     if (SantasStashEnabled) {
-        static SantasStashTime := 3600
+        static SantasStashTime := 1800
         SantasStashRemaining := Max(0, SantasStashTime - (currentTime - LastSantasStashTime))
         tooltipText .= "SantasStash: " (SantasStashRemaining // 60) ":" Format("{:02}", Mod(SantasStashRemaining, 60)) "`n"
     }
@@ -1558,6 +1558,7 @@ F3::
     ; pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
     ; Gdip_SaveBitmapToFile(pBMScreen,"ss.png")
     ; Gdip_DisposeImage(pBMScreen)
+    buyShop(getItems("SantasStash"), "SantasStash")
     PauseMacro()
 }
 
