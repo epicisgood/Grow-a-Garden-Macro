@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 #Warn VarUnset, Off
 SetWorkingDir A_ScriptDir . "\.."
@@ -769,7 +769,7 @@ buyShop(itemList, itemType, crafting := false){
     if (itemType == "Event" || itemType == "Eggs" || itemType == "Gears"){
         pos := 0.9
     } else if (itemType == "SantasStash"){
-        pos := 0.835
+        pos := 0.86
     } else {
         pos := 0.9
     }
@@ -1619,9 +1619,7 @@ BuySantasStash(){
     searchItem("Event Lantern")
     clickItem("Event Lantern", "Event Lantern")
     Sleep(1000)
-    Walk(1350,WKey)
-    Sleep(500)
-    Walk(400,Dkey)
+    Walk(1250,WKey)
     Sleep(1000)
     Send("{" Ekey "}")
     if !DetectShop("SantasStash"){
