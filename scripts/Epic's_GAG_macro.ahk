@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 #SingleInstance Force
 #Warn VarUnset, Off
 SetWorkingDir A_ScriptDir . "\.."
@@ -1619,7 +1619,9 @@ BuySantasStash(){
     searchItem("Event Lantern")
     clickItem("Event Lantern", "Event Lantern")
     Sleep(1000)
-    Walk(1250,WKey)
+    Walk(1350,WKey)
+    Sleep(500)
+    Walk(400,Dkey)
     Sleep(1000)
     Send("{" Ekey "}")
     if !DetectShop("SantasStash"){
