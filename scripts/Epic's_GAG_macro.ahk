@@ -1558,7 +1558,6 @@ F3::
     ; pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
     ; Gdip_SaveBitmapToFile(pBMScreen,"ss.png")
     ; Gdip_DisposeImage(pBMScreen)
-    buyShop(getItems("SantasStash"), "SantasStash")
     PauseMacro()
 }
 
@@ -1619,7 +1618,9 @@ BuySantasStash(){
     searchItem("Event Lantern")
     clickItem("Event Lantern", "Event Lantern")
     Sleep(1000)
-    Walk(1250,WKey)
+    Walk(1350,WKey)
+    Sleep(500)
+    Walk(400,Dkey)
     Sleep(1000)
     Send("{" Ekey "}")
     if !DetectShop("SantasStash"){
