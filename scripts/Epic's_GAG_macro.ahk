@@ -768,7 +768,7 @@ CheckStock(index, list, crafting := false){
 buyShop(itemList, itemType, crafting := false){
     if (itemType == "Event" || itemType == "Eggs" || itemType == "Gears"){
         pos := 0.9
-    } else if (itemType == "SantasStash"){
+    } else if (itemType == "NewYears"){
         pos := 0.86
     } else {
         pos := 0.9
@@ -1361,7 +1361,7 @@ MainLoop() {
     BuySeeds()
     BuyGears()
     BuyEggs()
-    BuySantasStash()
+    BuyNewYears()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1402,7 +1402,7 @@ MainLoop() {
 ShowToolTip(){
     global LastShopTime
     global LastEggsTime
-    global LastSantasStashTime
+    global LastNewYearsTime
     ; global LastfallCosmeticsTime
     global LastDevillishDecorTime
     global LastCreepyCrittersTime
@@ -1417,7 +1417,7 @@ ShowToolTip(){
     static SeedsEnabled := IniRead(settingsFile, "Seeds", "Seeds") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    static SantasStashEnabled := IniRead(settingsFile, "SantasStash", "SantasStash") + 0
+    static NewYearsEnabled := IniRead(settingsFile, "NewYears", "NewYears") + 0
     ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
     static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
     static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
@@ -1443,10 +1443,10 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    if (SantasStashEnabled) {
-        static SantasStashTime := 1800
-        SantasStashRemaining := Max(0, SantasStashTime - (currentTime - LastSantasStashTime))
-        tooltipText .= "SantasStash: " (SantasStashRemaining // 60) ":" Format("{:02}", Mod(SantasStashRemaining, 60)) "`n"
+    if (NewYearsEnabled) {
+        static NewYearsTime := 600
+        NewYearsRemaining := Max(0, NewYearsTime - (currentTime - LastNewYearsTime))
+        tooltipText .= "NewYears: " (NewYearsRemaining // 60) ":" Format("{:02}", Mod(NewYearsRemaining, 60)) "`n"
     }
     ; if (fallCosmeticsEnabled) {
     ;     static fallCosmeticsTime := 3600
@@ -1608,25 +1608,22 @@ CookingEvent(){
 
 
 
-BuySantasStash(){
-    if !(CheckSetting("SantasStash", "SantasStash")){
+BuyNewYears(){
+    if !(CheckSetting("NewYears", "NewYears")){
         return 0
     }
 
-    PlayerStatus("Going to Santas Stash Shop!", "0x22e6a8",,false,,false)
-
+    PlayerStatus("Going to New Years Shop!", "0x22e6a8",,false,,false)
     searchItem("Event Lantern")
     clickItem("Event Lantern", "Event Lantern")
     Sleep(1000)
-    Walk(1350,WKey)
-    Sleep(500)
-    Walk(400,Dkey)
-    Sleep(1000)
     Send("{" Ekey "}")
-    if !DetectShop("SantasStash"){
+    Sleep(500)
+    clickOption(1,3)
+    if !DetectShop("NewYears"){
         return 0 
     }
-    buyShop(getItems("SantasStash"), "SantasStash")
+    buyShop(getItems("NewYears"), "NewYears")
     CloseClutter()
     Clickbutton("Garden")
     return 1

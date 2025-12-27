@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.3.1"
+version := "v1.3.2"
 settingsFile := "settings.ini"
 
 
@@ -132,7 +132,7 @@ SaveSettings(settingsJson) {
         "EggItems",  "Eggs",
         "GearCraftingItems", "GearCrafting",
         "SeedCraftingItems", "SeedCrafting",
-        "SantasStashItems", "SantasStash",
+        "NewYearsItems", "NewYears",
         ; "fallCosmeticsItems", "fallCosmetics",
         "DevillishDecorItems", "DevillishDecor",
         "CreepyCrittersItems", "CreepyCritters",
@@ -162,7 +162,7 @@ SendSettings(){
     
     SeedCraftingItems := getItems("SeedCrafting")
     
-    SantasStashItems := getItems("SantasStash")
+    NewYearsItems := getItems("NewYears")
     ; fallCosmeticsItems := getItems("fallCosmetics")
     DevillishDecorItems := getItems("DevillishDecor")
     CreepyCrittersItems := getItems("CreepyCritters")
@@ -172,7 +172,7 @@ SendSettings(){
     EggItems.Push("Eggs")
     GearCraftingItems.Push("GearCrafting")
     SeedCraftingItems.Push("SeedCrafting")
-    SantasStashItems.Push("SantasStash")
+    NewYearsItems.Push("NewYears")
     ; fallCosmeticsItems.Push("fallCosmetics")
     DevillishDecorItems.Push("DevillishDecor")
     CreepyCrittersItems.Push("CreepyCritters")
@@ -202,8 +202,8 @@ SendSettings(){
         for i in SeedCraftingItems {
             IniWrite("0", settingsFile, "SeedCrafting", StrReplace(i, " ", ""))
         }
-        for i in SantasStashItems {
-            IniWrite("0", settingsFile, "SantasStash", StrReplace(i, " ", ""))
+        for i in NewYearsItems {
+            IniWrite("0", settingsFile, "NewYears", StrReplace(i, " ", ""))
         }
         ; for i in fallCosmeticsItems {
         ;     IniWrite("0", settingsFile, "fallCosmetics", StrReplace(i, " ", ""))
@@ -243,7 +243,7 @@ SendSettings(){
       , EggItems:  Map()
       , GearCraftingItems: Map()
       , SeedCraftingItems: Map()
-      , SantasStashItems: Map()
+      , NewYearsItems: Map()
     ;   , fallCosmeticsItems: Map()
       , DevillishDecorItems: Map()
       , CreepyCrittersItems: Map()
@@ -285,11 +285,11 @@ SendSettings(){
         SettingsJson.GearCraftingItems[key] := value
     }
 
-    for item in SantasStashItems {
+    for item in NewYearsItems {
         key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "SantasStash", key, "0")
-        IniWrite(value, settingsFile, "SantasStash", key)
-        SettingsJson.SantasStashItems[key] := value
+        value := IniRead(settingsFile, "NewYears", key, "0")
+        IniWrite(value, settingsFile, "NewYears", key)
+        SettingsJson.NewYearsItems[key] := value
     }
     ; for item in fallCosmeticsItems {
     ;     key := StrReplace(item, " ", "")
