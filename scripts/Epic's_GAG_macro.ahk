@@ -786,7 +786,7 @@ buyShop(itemList, itemType, crafting := false){
                 Sleep(250)
             } 
             relativeMouseMove(0.4,pos)
-            Loop itemList.length * 2.5 {
+            Loop itemList.length * 3 {
                 Send("{WheelUp}")
                 Sleep 20
             }
