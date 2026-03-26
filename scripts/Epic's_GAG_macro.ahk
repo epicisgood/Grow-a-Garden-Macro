@@ -568,7 +568,11 @@ ChangeCamera(type){
         Sleep(50)
     }
     Sleep(150)
-    Send("{Down}")
+    
+    loop IniRead(settingsFile, "Settings", "RobloxGUI", 1) {
+        Send("{Down}")
+        Sleep(50)
+    }
     HyperSleep(333)
     Send("{Right}")
     HyperSleep(333)
@@ -578,6 +582,7 @@ ChangeCamera(type){
     Send("{" EscKey "}")
     HyperSleep(1000)
 }
+
 
 
 checkCamera(type){  

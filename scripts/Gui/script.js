@@ -60,6 +60,7 @@ async function onSaveClick() {
     CookingEvent:  +document.getElementById('CookingEvent').checked,
     SearchList:  document.getElementById('SearchList').value,
     CookingTime:  document.getElementById('CookingTime').value,
+    RobloxGUI:  document.getElementById('RobloxGUI').value,
     seedItems: {},
     // seed2Items: {},
     gearItems: {},
@@ -113,6 +114,7 @@ function applySettings(a) {
     document.getElementById('CookingEvent').checked  = !!+s.CookingEvent
     document.getElementById('SearchList').value  = s.SearchList
     document.getElementById('CookingTime').value  = s.CookingTime
+    document.getElementById('RobloxGUI').value  = s.RobloxGUI
 
     const allItems = {
       SeedItems: s.SeedItems,

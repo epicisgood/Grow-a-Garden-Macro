@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.3.3"
+version := "v1.3.4"
 settingsFile := "settings.ini"
 
 
@@ -121,7 +121,7 @@ SaveSettings(settingsJson) {
     IniFile := A_WorkingDir . "\settings.ini"
 
     for key, val in settings {
-        if (key == "url" || key == "discordID" || key == "VipLink" || key == "Cosmetics" || key == "TravelingMerchant" || key == "CookingEvent" || key == "SearchList" || key == "CookingTime") {
+        if (key == "url" || key == "discordID" || key == "VipLink" || key == "Cosmetics" || key == "TravelingMerchant" || key == "CookingEvent" || key == "SearchList" || key == "CookingTime" || key == "RobloxGUI") {
             IniWrite(val, IniFile, "Settings", key)
         }
     }
@@ -187,6 +187,7 @@ SendSettings(){
         IniWrite("0", settingsFile, "Settings", "CookingEvent")
         IniWrite("", settingsFile, "Settings", "SearchList")
         IniWrite("", settingsFile, "Settings", "CookingTime")
+        IniWrite("1", settingsFile, "Settings", "RobloxGUI")
         for i in seedItems {
             IniWrite("1", settingsFile, "Seeds", StrReplace(i, " ", ""))
         }
@@ -238,6 +239,7 @@ SendSettings(){
       , CookingEvent:  IniRead(settingsFile, "Settings", "CookingEvent")
       , SearchList:  IniRead(settingsFile, "Settings", "SearchList")
       , CookingTime:  IniRead(settingsFile, "Settings", "CookingTime")
+      , RobloxGUI:  IniRead(settingsFile, "Settings", "RobloxGUI")
       , SeedItems: Map()
       , GearItems: Map()
       , EggItems:  Map()
