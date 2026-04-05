@@ -773,8 +773,8 @@ CheckStock(index, list, crafting := false){
 buyShop(itemList, itemType, crafting := false){
     if (itemType == "Event" || itemType == "Eggs" || itemType == "Gears"){
         pos := 0.9
-    } else if (itemType == "NewYears"){
-        pos := 0.86
+    } else if (itemType == "EasterSeed"){
+        pos := 0.872
     } else {
         pos := 0.9
     }
@@ -1366,7 +1366,7 @@ MainLoop() {
     BuySeeds()
     BuyGears()
     BuyEggs()
-    BuyNewYears()
+    BuyEasterSeed()
     ; BuyEvent()
     BuyCosmetics()
     global LastCookingTime := nowUnix()
@@ -1407,7 +1407,7 @@ MainLoop() {
 ShowToolTip(){
     global LastShopTime
     global LastEggsTime
-    global LastNewYearsTime
+    global LastEasterSeedTime
     ; global LastfallCosmeticsTime
     global LastDevillishDecorTime
     global LastCreepyCrittersTime
@@ -1422,7 +1422,7 @@ ShowToolTip(){
     static SeedsEnabled := IniRead(settingsFile, "Seeds", "Seeds") + 0
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
-    static NewYearsEnabled := IniRead(settingsFile, "NewYears", "NewYears") + 0
+    static EasterSeedEnabled := IniRead(settingsFile, "EasterSeed", "EasterSeed") + 0
     ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
     static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
     static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
@@ -1448,10 +1448,10 @@ ShowToolTip(){
         GearRemaining := Max(0, GearTime - (currentTime - LastShopTime))
         tooltipText .= "Gears: " (GearRemaining // 60) ":" Format("{:02}", Mod(GearRemaining, 60)) "`n"
     }
-    if (NewYearsEnabled) {
-        static NewYearsTime := 600
-        NewYearsRemaining := Max(0, NewYearsTime - (currentTime - LastNewYearsTime))
-        tooltipText .= "NewYears: " (NewYearsRemaining // 60) ":" Format("{:02}", Mod(NewYearsRemaining, 60)) "`n"
+    if (EasterSeedEnabled) {
+        static EasterSeedTime := 300
+        EasterSeedRemaining := Max(0, EasterSeedTime - (currentTime - LastEasterSeedTime))
+        tooltipText .= "EasterSeed: " (EasterSeedRemaining // 60) ":" Format("{:02}", Mod(EasterSeedRemaining, 60)) "`n"
     }
     ; if (fallCosmeticsEnabled) {
     ;     static fallCosmeticsTime := 3600
@@ -1613,22 +1613,24 @@ CookingEvent(){
 
 
 
-BuyNewYears(){
-    if !(CheckSetting("NewYears", "NewYears")){
+BuyEasterSeed(){
+    if !(CheckSetting("EasterSeed", "EasterSeed")){
         return 0
     }
 
-    PlayerStatus("Going to New Years Shop!", "0x22e6a8",,false,,false)
+    PlayerStatus("Going to Easter Seed Shop!", "0x22e6a8",,false,,false)
     searchItem("Event Lantern")
     clickItem("Event Lantern", "Event Lantern")
     Sleep(1000)
+    Walk(1100,Akey)
+    Walk(500,Wkey)
+    Sleep(1000)
     Send("{" Ekey "}")
     Sleep(500)
-    clickOption(1,3)
-    if !DetectShop("NewYears"){
+    if !DetectShop("EasterSeed"){
         return 0 
     }
-    buyShop(getItems("NewYears"), "NewYears")
+    buyShop(getItems("EasterSeed"), "EasterSeed")
     CloseClutter()
     Clickbutton("Garden")
     return 1
