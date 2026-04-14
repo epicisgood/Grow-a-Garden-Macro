@@ -815,6 +815,9 @@ buyShop(itemList, itemType, crafting := false){
         } else if ((A_Index >= 14 && itemType == "GearCrafting")){
             ScrollDown(0.25 + A_Index * 0.025)
             Sleep(250)
+        } else if (A_Index >= 12 && itemType == "EasterSeed"){
+            ScrollDown(0.25)
+            Sleep(250)
         }
 
         if (CheckSetting(itemType, StrReplace(item, " ", ""))){
