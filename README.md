@@ -1,5 +1,11 @@
 # 🍏 Epic's Grow a Garden Macro
 
+![GitHub Repo stars](https://img.shields.io/github/stars/epicisgood/Grow-a-Garden-Macro?style=flat)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/epicisgood/Grow-a-Garden-Macro/total)
+![GitHub Created At](https://img.shields.io/github/created-at/epicisgood/Grow-a-Garden-Macro)
+![GitHub License](https://img.shields.io/github/license/epicisgood/Grow-a-Garden-Macro)
+
+
 A macro for **Grow a Garden** that automatically buys your selected seeds, gear, and crafting benches and more!
 
 ✅ Supports **auto-reconnect** and sends **images via Discord webhook**.
