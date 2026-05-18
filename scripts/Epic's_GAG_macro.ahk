@@ -773,7 +773,7 @@ CheckStock(index, list, crafting := false){
 buyShop(itemList, itemType, crafting := false){
     if (itemType == "Event" || itemType == "Eggs" || itemType == "Gears"){
         pos := 0.9
-    } else if (itemType == "EasterSeed"){
+    } else if (itemType == "EasterSeed" || itemType == "Settings"){
         pos := 0.872
     } else {
         pos := 0.9
@@ -1566,6 +1566,7 @@ F3::
     ; pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
     ; Gdip_SaveBitmapToFile(pBMScreen,"ss.png")
     ; Gdip_DisposeImage(pBMScreen)
+    buymerchant()
     PauseMacro()
 }
 
