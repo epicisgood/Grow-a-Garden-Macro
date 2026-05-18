@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.3.6"
+version := "v1.3.7"
 settingsFile := "settings.ini"
 
 
