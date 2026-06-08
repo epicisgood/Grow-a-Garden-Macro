@@ -4,302 +4,354 @@
   <meta charset="UTF-8" />
   <title>Epic's GAG Macro UI</title>
   <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
   <div class="container">
-    <div class="macrotitle">
-          <img src="../../images/GameIcon.ico"
-          style="width: 32.5px; height: 32.5px; margin-bottom: 3px; vertical-align: middle;">
-          Epic's Grow a Garden Macro
-    </div>
 
     <div class="window-controls" id="ahkTitleBar">
-        <button class="minimizeButton" onclick="ahk.global.WinMinimize('A')">_</button>
+      <div class="macrotitle">
+        <img src="../../images/GameIcon.ico" alt="Icon">
+        Epic's Grow a Garden Macro
+      </div>
+      
+      <div class="title-buttons">
+        <button class="minimizeButton" onclick="ahk.global.WinMinimize('A')">—</button>
         <button class="closeButton" onclick="ahk.global.WinClose('A')">x</button>
+      </div>
     </div>
+
     <div class="tabs">
-      <button onclick="switchTab('main tab')">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-house-icon lucide-house">
-          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
-          <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <button onclick="switchTab('Shops tab')" class="tab-button-active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
-        Main
-      </button>
-
-      <button onclick="switchTab('Seeds tab')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-apple-icon lucide-apple"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></svg>
-        Seeds
-      </button>
-
-      <button onclick="switchTab('Gears tab')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings2-icon lucide-settings-2"><path d="M14 17H5"/><path d="M19 7h-9"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
-        Gears
-      </button>
-
-      <button onclick="switchTab('Eggs tab')">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-egg-icon lucide-egg"><path d="M12 2C8 2 4 8 4 14a8 8 0 0 0 16 0c0-6-4-12-8-12"/></svg>
-        Eggs
+        Shops
       </button>
 
       <button onclick="switchTab('Crafting tab')">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+          <path d="m15 5 4 4"/>
+        </svg>
         Crafting
       </button>
 
       <button onclick="switchTab('Event tab')">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-trophy-icon lucide-trophy">
-          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-          <path d="M4 22h16"/>
-          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55+.47.98+.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
         </svg>
-        Event
+        Extra
+      </button>
+
+      <button onclick="switchTab('Settings tab')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Settings
+      </button>
+
+      <button onclick="switchTab('About tab')">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+          <rect x="12" y="8" width="0.01" height="0.01" stroke="currentColor" stroke-width="3.75" stroke-linejoin="round"></rect>
+          <path d="M12 12V16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        About
       </button>
     </div>
 
-    <div id="main tab" class="tab active">
-      <label>Webhook URL:</label>
-      <input type="text" id="url" placeholder="https://discord.com/api/webhooks/WebhookHere">
-
-      <label>Discord ID:</label>
-      <input type="text" id="discordID" placeholder="1234567890">
-
-      <label>Private Link:</label>
-      <input type="text" id="VipLink" placeholder="https://www.roblox.com/games/126884695634066/Grow-a-Garden?privateServerLinkCode=28062830835932767537940880155560">
-
-      <div class="donate-section">
-        <div class="credits">
-          <span>Macro By: _epic. </span>
-          <div></div>
-          <span id="random-message"></span>
-          <div></div>
-          <div></div>
-          <div></div>
-            <div>
-              <img class="discord-btn" onclick="ahk.global.run('https://discord.gg/Vc465gUXHk')" alt="Discord!" src="../../images/Other/discordButton.png">
-              <img class="donate-btn" onclick="ahk.global.run('https://www.roblox.com/games/18130765440/Grow-a-Garden-Donation-Area#!/store')" src="../../images/Other/donateButton.png" alt="Donate Here!">
+    <div id="Shops tab" class="tab active split-tab-layout">
+      <div class="sidebar-menu">
+        <button class="sidebar-btn active" onclick="switchSubTab('Seeds sub-tab')">Seeds</button>
+        <button class="sidebar-btn" onclick="switchSubTab('Gears sub-tab')">Gears</button>
+        <button class="sidebar-btn" onclick="switchSubTab('Eggs sub-tab')">Eggs</button>
+        <button class="sidebar-btn" onclick="switchSubTab('EasterSeed sub-tab')">Event</button>
+      </div>
+      
+      <div class="sidebar-content-view">
+        <div id="Seeds sub-tab" class="sub-tab active">
+          <div class="rewards-grid" id="SeedsGrid">
+            <div class="reward-box">
+              <div class="reward-options">
+                <label><input type="checkbox" id="Seeds">Enable</label>
+              </div>
+              <hr style="margin: 10px 0;">
+              <div class="reward-options">
+                <label><input type="checkbox" class="SelectAll">Select All</label>
+              </div>
             </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div id="Seeds tab" class="tab">  
-      <div class="rewards-grid" id="SeedsGrid">
-        <div class="reward-box" style="font-weight: 500;">
-          <div class="reward-options">
-            <label><input type="checkbox" id="Seeds">Enable Seeds</label>
-          </div>
-          <div style="height: 17px;"></div>
-          <div class="reward-options">
-            <label><input type="checkbox" class="SelectAll">Select All</label>
           </div>
         </div>
+
+        <div id="Gears sub-tab" class="sub-tab">
+          <div class="rewards-grid" id="GearsGrid">
+            <div class="reward-box">
+              <div class="reward-options">
+                <label><input type="checkbox" id="Gears">Enable</label>
+              </div>
+              <hr style="margin: 10px 0;">
+              <div class="reward-options">
+                <label><input type="checkbox" class="SelectAll">Select All</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="Eggs sub-tab" class="sub-tab">
+          <div class="rewards-grid" id="EggsGrid">
+            <div class="reward-box">
+              <div class="reward-options">
+                <label><input type="checkbox" id="Eggs">Enable</label>
+              </div>
+              <hr style="margin: 10px 0;">
+              <div class="reward-options">
+                <label><input type="checkbox" class="SelectAll"> All</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="EasterSeed sub-tab" class="sub-tab">
+          <div class="rewards-grid" id="EasterSeedGrid">
+            <div class="reward-box">
+              <div class="reward-options">
+                <label><input type="checkbox" id="EasterSeed">Enable</label>
+              </div>
+              <hr style="margin: 10px 0;">
+              <div class="reward-options">
+                <label><input type="checkbox" class="SelectAll">Select All</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-
-
     </div>
-
-    <div id="Gears tab" class="tab">  
-      <div class="rewards-grid" id="GearsGrid">
-
-      <div class="reward-box" style="font-weight: 500;">
-        <div class="reward-options">
-          <label><input type="checkbox" id="Gears">Enable Gears</label>
-        </div>
-        <div style="height: 17px;"></div>
-        <div class="reward-options">
-          <label><input type="checkbox" class="SelectAll">Select All</label>
-        </div>
-      </div>
-
-      </div>
-    </div>
-
-    <div id="Eggs tab" class="tab">  
-      <div class="rewards-grid" id="EggsGrid">
-
-      <div class="reward-box" style="font-weight: 500;">
-        <div class="reward-options">
-          <label><input type="checkbox" id="Eggs">Enable Eggs</label>
-        </div>
-        <div style="height: 17px;"></div>
-        <div class="reward-options">
-          <label><input type="checkbox" class="SelectAll">Select All</label>
-        </div>
-      </div>
-
-      </div>
-      
-    </div>
-
 
     <div id="Crafting tab" class="tab">
-
-    <h3>Gear Crafting</h3>
-    <div class="rewards-grid" id="GearCraftingGrid">
-      <div class="reward-box">
-        <div class="reward-header">
-          <span>Craft Gears?</span>
+      <div class="rewards-grid" id="GearCraftingGrid">
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Gear Crafting</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Automatically crafts selected gear at crafting bench.</div>
+            </div>
+          </div>
+          <div class="reward-options"><label><input type="checkbox" id="GearCrafting">Enable</label></div>
         </div>
-        <div class="reward-options">
-          <label><input type="checkbox" id="GearCrafting">Enable</label>
+      </div>
+      <hr>
+      <div class="rewards-grid" id="SeedCraftingGrid">
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Seed Crafting</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Automatically crafts selected seed at crafting bench.</div>
+            </div>
+          </div>
+          <div class="reward-options"><label><input type="checkbox" id="SeedCrafting">Enable</label></div>
         </div>
       </div>
     </div>
 
-
-    <hr>
-    <h3>Seed Crafting</h3>
-
-    <div class="rewards-grid" id="SeedCraftingGrid">
-      <div class="reward-box">
-        <div class="reward-header">
-          <span>Craft Seeds?</span>
-        </div>
-        <div class="reward-options">
-          <label><input type="checkbox" id="SeedCrafting">Enable</label>
-        </div>
-      </div>
-    </div>
-
-
-
-    </div>
-
-
-    <div id="Event tab" class="tab">  
+    <div id="Event tab" class="tab">
       <div class="rewards-grid">
-
         <div class="reward-box">
           <div class="reward-header">
-            <img src="../../images/Events/theGoat.webp" style="width: 32.5px; height: 32.5px; margin-right: 3px; vertical-align: middle;">
+            <img src="../../images/Events/theGoat.webp" style="width: 28px; height: 28px;" onerror="this.style.display='none'">
             <span>Traveling Merchant</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Buys ALL items in shop whenever merchant appears.</div>
+            </div>
           </div>
-          <div class="reward-options">
-            <label><input type="checkbox" id="TravelingMerchant">Claim</label>
-          </div>
-          
+          <div class="reward-options"><label><input type="checkbox" id="TravelingMerchant">Enable</label></div>
         </div>
 
         <div class="reward-box">
           <div class="reward-header">
-            <img src="../../images/Events/Cosmetics.webp" style="width: 32.5px; height: 32.5px; margin-right: 3px; vertical-align: middle;">
+            <img src="../../images/Events/Cosmetics.webp" style="width: 28px; height: 28px;" onerror="this.style.display='none'">
             <span>Cosmetics</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Buys all cosmetics.</div>
+            </div>
           </div>
-          <div class="reward-options">
-            <label><input type="checkbox" id="Cosmetics">Claim</label>
-          </div>
-          
+          <div class="reward-options"><label><input type="checkbox" id="Cosmetics">Enable</label></div>
         </div>
 
         <div class="reward-box">
           <div class="reward-header">
-            <img src="../../images/Events/Cooking_Kit.webp" style="width: 32.5px; height: 32.5px; margin-right: 3px; vertical-align: middle;">
+            <img src="../../images/Events/Cooking_Kit.webp" style="width: 28px; height: 28px;" onerror="this.style.display='none'">
             <span>Auto Cooker</span>
           </div>
-          <div class="reward-options">
-            <label><input type="checkbox" id="CookingEvent">Claim</label>
-          </div>
-          
+          <div class="reward-options"><label><input type="checkbox" id="CookingEvent">Enable</label></div>
         </div>
 
         <div class="reward-box">
           <div class="reward-header">
-            <img src="../../images/Events/CakeIcon.webp" style="width: 32.5px; height: 32.5px; margin-right: 3px; vertical-align: middle;">
             <span>Cooking Recipe</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Type explicit cooking ingredients separated by commas (with or without spaces).</div>
+            </div>
           </div>
-          <div class="reward-options">
-            <label><input type="text" id="SearchList" placeholder="Carrot, Banana, etc"></label>
-          </div>
-          
+          <div class="reward-options raw-input-field"><input type="text" id="SearchList" placeholder="Carrot, Banana, etc"></div>
         </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Cooking Time</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">How many SECONDS the macro will wait till it collects cooking item.</div>
+            </div>
+          </div>
+          <div class="reward-options raw-input-field"><input type="text" id="CookingTime" placeholder="60"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="Settings tab" class="tab">
+      <div class="rewards-grid">
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Webhook URL:</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Your Discord channel webhook URL link to output live notifications. OPTIONAL setting.</div>
+            </div>
+          </div>
+          <div class="reward-options raw-input-field"><input type="text" id="url" placeholder="https://discord.com/api/webhooks/..."/></div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Discord ID:</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Your Discord user ID to ping you when rare events happen. OPTIONAL setting.</div>
+            </div>
+          </div>
+          <div class="reward-options raw-input-field"><input type="text" id="discordID" placeholder="726162926851063919"></div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Private Link:</span>
+            <div class="info-tooltip-holder">
+              <svg viewBox="0 0 24 24" class="info-svg"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <div class="tooltip-box">Used to Automatically reconnect back to your private server instead of a public one.</div>
+            </div>
+          </div>
+          <div class="reward-options raw-input-field"><input type="text" id="VipLink" placeholder="https://www.roblox.com/games/..."></div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <span>Light Mode</span>
+          </div>
+          <div class="reward-options"><label><input type="checkbox" id="ThemeToggle">Enable</label></div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <div id="About tab" class="tab">
+      <div class="about-hero">
+        <img src="../../images/Other/creatorAvatar.png" alt="Creator Avatar" class="creator-avatar">
+        <div class="hero-text">
+          <h2 id="random-message">Hello! Thank you for choosing my macro, please share it with your friends!</h2>
+          <p>The macro was designed by <span>_epic.</span> 🤑</p>
+        </div>
+      </div>
+
+      <div class="rewards-grid">
+        <div class="reward-box creator-card">
+          <div class="reward-header">
+            <img src="../../images/Other/discordLogo.png" alt="Discord" class="card-icon">
+            <span>Discord Community</span>
+          </div>
+          <div class="card-body">
+            <button class="card-action-btn" onclick="ahk.global.run('https://discord.gg/Vc465gUXHk')">Join Server</button>
+          </div>
+        </div>
+
+        <div class="reward-box creator-card">
+          <div class="reward-header">
+            <img src="../../images/Other/youtubeLogo.png" alt="YouTube" class="card-icon">
+            <span>YouTube Channel</span>
+          </div>
+          <div class="card-body">
+            <button class="card-action-btn" onclick="ahk.global.run('https://youtube.com/@epicisop')">Subscribe</button>
+          </div>
+        </div>
+
+
+        <div class="reward-box creator-card donate-highlight">
+          <div class="reward-header">
+            <img src="../../images/Other/patreonLogo.svg" alt="Patreon" class="card-icon">
+            <span>Support My Work</span>
+          </div>
+          <div class="card-body">
+            <button class="card-action-btn" onclick="ahk.global.run('https://www.patreon.com/epicisop')">Donate Here!</button>
+          </div>
+        </div>
+
+
+
+        <div class="reward-box creator-card">
+          <div class="reward-header">
+            <img src="../../images/Other/robloxLogo.png" alt="Roblox" class="card-icon">
+            <span>Roblox Account</span>
+          </div>
+          <div class="card-body">
+            <button class="card-action-btn" onclick="ahk.global.run('https://www.roblox.com/users/1229562333/profile')">View Profile</button>
+          </div>
+        </div>
+
+        <div class="reward-box creator-card">
+          <div class="reward-header">
+            <img src="../../images/Other/GithubLogo.png" alt="GitHub" class="card-icon">
+            <span>GitHub Developer</span>
+          </div>
+          <div class="card-body">
+            <button class="card-action-btn" onclick="ahk.global.run('https://github.com/epicisgood')">Follow Dev</button>
+          </div>
+        </div>
+
+        <div class="reward-box creator-card">
+          <div class="reward-header">
+            <img src="../../images/GameIcon.ico" alt="Source Code" class="card-icon">
+            <span>Macro Repository</span>
+          </div>
+          <div class="card-body">
+            <button class="card-action-btn" onclick="ahk.global.run('https://github.com/epicisgood/Grow-a-Garden-Macro')">View Source</button>
+          </div>
+        </div>
+
         
-        <div class="reward-box">
-          <div class="reward-header">
-            <span>Cooking Time (Seconds)</span>
-          </div>
-          <div class="reward-options">
-            <label><input type="text" id="CookingTime" placeholder="60 (For 1 minute)"></label>
-          </div>
-          
-        </div>
 
-        <div class="reward-box">
-          <div class="reward-header">
-            <span>Camera Mode Count</span>
-          </div>
-          <div class="reward-options">
-            <label><input type="text" id="RobloxGUI"></label>
-          </div>
-          
-        </div>
-
-      </div>
-
-
-  <div class="rewards-grid" id="EasterSeedGrid">
-      <div class="reward-box" style="font-weight: 500;">
-        <div class="reward-options">
-          <label><input type="checkbox" id="EasterSeed">Enable Easter Seed Shop</label>
-        </div>
-        <div style="height: 17px;"></div>
-        <div class="reward-options">
-          <label><input type="checkbox" class="SelectAll">Select All</label>
-        </div>
-      </div>
-  </div>
-
-  
-  <div class="rewards-grid" id="DevillishDecorGrid" style="display: none;">
-    <div class="reward-box" style="font-weight: 500;">
-      <div class="reward-options">
-        <label><input type="checkbox" id="DevillishDecor">Enable Devillish Decor</label>
-      </div>
-      <div style="height: 17px;"></div>
-      <div class="reward-options">
-        <label><input type="checkbox" class="SelectAll">Select All</label>
-        </div>
       </div>
     </div>
-    <div class="rewards-grid" id="CreepyCrittersGrid" style="display: none;">
-      <div class="reward-box" style="font-weight: 500;">
-        <div class="reward-options">
-          <label><input type="checkbox" id="CreepyCritters">Enable Creepy Critters</label>
-        </div>
-        <div style="height: 17px;"></div>
-        <div class="reward-options">
-          <label><input type="checkbox" class="SelectAll">Select All</label>
-        </div>
-      </div>
-    </div>
-<!--     
-    <div class="rewards-grid" id="fallCosmeticsGrid" >
-        <div class="reward-box" style="font-weight: 500;">
-          <div class="reward-options">
-            <label><input type="checkbox" id="fallCosmetics">Enable Fall Cosmetics</label>
-          </div>
-          <div style="height: 17px;"></div>
-          <div class="reward-options">
-            <label><input type="checkbox" class="SelectAll">Select All</label>
-          </div>
-        </div>
-    </div> -->
-    
-  </div>
-  
-  
 
-    <hr>
     <div class="footer">
-      <button onclick="ahk.ButtonClick.Func('Start')">Start (F1)</button>
-      <button onclick="ahk.ButtonClick.Func('Stop')">Stop (F2)</button>
-      <button onclick="onSaveClick(this)" class="saveButton">Save All</button>
+      <div class="footer-buttons-container">
+        <button onclick="ahk.ButtonClick.Func('Start')">Start (F1)</button>
+        <button onclick="ahk.ButtonClick.Func('Pause')">Pause (F2)</button>
+        <button onclick="ahk.ButtonClick.Func('Stop')">Stop (F3)</button>
+      </div>
+
+      <div class="footer-status">
+        <h3 class="creator-name">Made by _epic.</h3>
+      </div>
+
     </div>
+
   </div>
 
   <script src="script.js"></script>

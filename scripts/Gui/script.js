@@ -1,10 +1,3 @@
-function switchTab(tabId) {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-}
-
-
-
 let cachedData = null;
 
 async function fetchAllItems() {
@@ -15,313 +8,311 @@ async function fetchAllItems() {
   return cachedData;
 }
 
-async function getItems(category) {
+async function getCategoryData(category) {
   const data = await fetchAllItems();
-  return data[category].map(item => item.name);
+  return {
+    rawItems: data[category],
+    names: data[category].map(item => item.name)
+  };
 }
 
-async function getItemJSON(category) {
-  const data = await fetchAllItems();
-  return data[category];
-}
+
+
 
 
 
 async function onSaveClick() {
-  const seedItems = await getItems("Seeds");
-  const gearItems = await getItems("Gears");
-  const EggItems = await getItems("Eggs");
-
-  const GearCraftingItems = await getItems("GearCrafting");
-
-  const SeedCraftingItems = await getItems("SeedCrafting");
-
-  const EasterSeedItems = await getItems("EasterSeed");
-  // const fallCosmeticsItems = await getItems("fallCosmetics");
-  const DevillishDecorItems = await getItems("DevillishDecor");
-  const CreepyCrittersItems = await getItems("CreepyCritters");
-
-  seedItems.push("Seeds");
-  gearItems.push("Gears");
-  EggItems.push("Eggs");
-  GearCraftingItems.push("GearCrafting");
-  SeedCraftingItems.push("SeedCrafting");
-  EasterSeedItems.push("EasterSeed");
-  // fallCosmeticsItems.push("fallCosmetics");
-  DevillishDecorItems.push("DevillishDecor");
-  CreepyCrittersItems.push("CreepyCritters");
-
   const cfg = {
     url: document.getElementById('url').value,
     discordID: document.getElementById('discordID').value,
     VipLink: document.getElementById('VipLink').value,
     TravelingMerchant: +document.getElementById('TravelingMerchant').checked,
     Cosmetics: +document.getElementById('Cosmetics').checked,
-    CookingEvent:  +document.getElementById('CookingEvent').checked,
-    SearchList:  document.getElementById('SearchList').value,
-    CookingTime:  document.getElementById('CookingTime').value,
-    RobloxGUI:  document.getElementById('RobloxGUI').value,
-    seedItems: {},
-    // seed2Items: {},
-    gearItems: {},
-    EggItems: {},
-    GearCraftingItems: {},
-    SeedCraftingItems: {},
-    EasterSeedItems: {},
-    // fallCosmeticsItems: {},
-    DevillishDecorItems: {},
-    CreepyCrittersItems: {},
+    CookingEvent: +document.getElementById('CookingEvent').checked,
+    SearchList: document.getElementById('SearchList').value,
+    CookingTime: document.getElementById('CookingTime').value,
+    ThemeToggle: +document.getElementById('ThemeToggle').checked,
+
+    dynamicItems: {} 
   };
 
-  const allLists = {
-    seedItems,
-    // seed2Items,
-    gearItems,
-    EggItems,
-    GearCraftingItems,
-    SeedCraftingItems,
-    EasterSeedItems,
-    // fallCosmeticsItems,
-    DevillishDecorItems,
-    CreepyCrittersItems,
-  };
+  for (const category of CATEGORIES) {
+    const { names } = await getCategoryData(category);
+    names.push(category);
 
-  for (const [listName, items] of Object.entries(allLists)) {
-    items.forEach(name => {
-      const key = name.replace(/\s+/g, '');
-      const element = document.getElementById(key);
+    cfg.dynamicItems[category] = {};
+
+    names.forEach(name => {
+      const element = document.getElementById(sanitizeId(name));
       if (element) {
-        cfg[listName][name] = element.checked;
+        cfg.dynamicItems[category][name] = element.checked;
       }
     });
-}
+  }
 
   ahk.Save.Func(JSON.stringify(cfg));
-  console.log(cfg);
+  console.log("Config Saved:", cfg);
 }
   
+function applySettings(payload) {
+  const settings = payload.data;
+  console.log("Applying incoming configurations:", settings);
 
-  
-function applySettings(a) {
-    const s = a.data;
-    console.log("Applying settings with these settings: ", s);
+  const fieldMap = {
+    'url': settings.url,
+    'discordID': settings.discordID,
+    'VipLink': settings.VipLink,
+    'SearchList': settings.SearchList,
+    'CookingTime': settings.CookingTime,
+    'ThemeToggle': !!+settings.ThemeToggle,
+    'Cosmetics': !!+settings.Cosmetics,
+    'TravelingMerchant': !!+settings.TravelingMerchant,
+    'CookingEvent': !!+settings.CookingEvent
+  };
 
-    document.getElementById('url').value       = s.url;
-    document.getElementById('discordID').value = s.discordID;
-    document.getElementById('VipLink').value   = s.VipLink;
-    document.getElementById('Cosmetics').checked  = !!+s.Cosmetics
-    document.getElementById('TravelingMerchant').checked  = !!+s.TravelingMerchant
-    document.getElementById('CookingEvent').checked  = !!+s.CookingEvent
-    document.getElementById('SearchList').value  = s.SearchList
-    document.getElementById('CookingTime').value  = s.CookingTime
-    document.getElementById('RobloxGUI').value  = s.RobloxGUI
-
-    const allItems = {
-      SeedItems: s.SeedItems,
-      // Seed2Items: s.Seed2Items,
-      GearItems: s.GearItems,
-      EggItems: s.EggItems,
-      GearCraftingItems: s.GearCraftingItems,
-      SeedCraftingItems: s.SeedCraftingItems,
-      EasterSeedItems: s.EasterSeedItems,
-      // fallCosmeticsItems: s.fallCosmeticsItems,
-      DevillishDecorItems: s.DevillishDecorItems,
-      CreepyCrittersItems: s.CreepyCrittersItems,
-    };
-
-    for (const [listName, items] of Object.entries(allItems)) {
-      for (const item in items) {
-        const formattedItem = item.replace(/\s+/g, '');
-        const element = document.getElementById(formattedItem);
-        if (element) {
-          element.checked = !!+items[item];
-          console.log(element, items[item])
-        }
-      }
+  Object.entries(fieldMap).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = value;
+      else el.value = value;
     }
+  });
+
+  if (settings.dynamicItems) {
+    Object.entries(settings.dynamicItems).forEach(([category, items]) => {
+      for (const itemName in items) {
+        const el = document.getElementById(sanitizeId(itemName));
+        if (el) el.checked = !!+items[itemName];
+      }
+    });
+  }
+
+  handleThemeChange();
 
 }
 
 
-async function AddHtml() {
-  const categories = [
-    "Seeds", "Gears", "Eggs", "GearCrafting", "SeedCrafting", "EasterSeed", "CreepyCritters", 'DevillishDecor'
-    // , "fallCosmetics"
-    ];
 
-  for (const category of categories) {
-    const items = await getItemJSON(category);
 
+const CATEGORIES = [
+  "Seeds", "Gears", "Eggs", "GearCrafting", "SeedCrafting", "EasterSeed", "CreepyCritters"
+];
+
+
+const sanitizeId = (str) => str.replace(/\s+/g, '');
+
+const getInputType = (category) => ["GearCrafting", "SeedCrafting"].includes(category) ? "radio" : "checkbox";
+
+
+async function buildDynamicItemGrids() {
+  for (const category of CATEGORIES) {
+    const { rawItems } = await getCategoryData(category);
     const rewardGrid = document.querySelector(`#${category}Grid`);
     if (!rewardGrid) continue;
 
-    for (const item of items) {
-      const sanitizedName = item.name.replace(/\s+/g, '');
+    const inputType = getInputType(category);
+    const inputName = inputType === "radio" ? `name="${category}"` : "";
+
+    rawItems.forEach(item => {
+      const sanitizedName = sanitizeId(item.name);
       const imgPath = item.image || `../../images/${category}/${item.name}.webp`;
 
-      const inputType = (category === "GearCrafting" || category === "SeedCrafting") ? "radio" : "checkbox";
-      const inputName = (inputType === "radio") ? `name="${category}"` : "";
-
-      const div = document.createElement("div");
-      div.className = "reward-box";
-      div.innerHTML = `
+      const boxCard = document.createElement("div");
+      boxCard.className = "reward-box";
+      boxCard.innerHTML = `
         <div class="reward-header">
-          <img src="${imgPath}" style="width: 32.5px; height: 32.5px; margin-right: 3px; vertical-align: middle;" onerror="this.src='../../images/Other/Placeholder.webp'">
+          <img src="${imgPath}" style="width: 28px; height: 28px; vertical-align: middle;" onerror="this.src='../../images/Other/Placeholder.webp'">
           <span>${item.name}</span>
         </div>
         <div class="reward-options">
           <label><input type="${inputType}" id="${sanitizedName}" ${inputName}>Claim</label>
         </div>
       `;
-
-      rewardGrid.appendChild(div);
-    }
+      rewardGrid.appendChild(boxCard);
+    });
   }
 }
 
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    await AddHtml()
-    ahk.ReadSettings.Func()
-    window.chrome.webview.addEventListener('message', applySettings);
-  })
 
+  await buildDynamicItemGrids();
+  ahk.ReadSettings.Func();
+  window.chrome.webview.addEventListener('message', applySettings);
 
-document.addEventListener("DOMContentLoaded", () => {
+  initTooltipSystem();
+  initDropdownControllers();
+
+  document.querySelectorAll('.tabs button').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('tab-button-active'));
+      this.classList.add('tab-button-active');
+    });
+  });
+
   document.querySelectorAll(".SelectAll").forEach(selectAllCheckbox => {
     selectAllCheckbox.addEventListener("change", () => {
       const rewardGrid = selectAllCheckbox.closest(".rewards-grid");
       if (!rewardGrid) return;
 
-      const checkboxes = rewardGrid.querySelectorAll("input[type='checkbox']");
-
-      checkboxes.forEach(cb => {
-        const isSelectAll = cb.classList.contains("SelectAll");
-        const isEnableCheckbox = [
-          "Seeds", "Gears", "Eggs", "EasterSeed", "CreepyCritters", 'DevillishDecor'
-          // , "fallCosmetics"
-        ].includes(cb.id);
-        if (!isSelectAll && !isEnableCheckbox) {
+      rewardGrid.querySelectorAll("input[type='checkbox']").forEach(cb => {
+        const isControl = cb.classList.contains("SelectAll") || CATEGORIES.includes(cb.id);
+        if (!isControl) {
           cb.checked = selectAllCheckbox.checked;
         }
       });
-    });
-  });
-});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Html cool stuff
-
-document.querySelectorAll('.tabs button').forEach(button => {
-  button.addEventListener('click', function() {
-    document.querySelectorAll('.tabs button').forEach(btn => {
-      btn.classList.remove('tab-button-active');
-    });
-    this.classList.add('tab-button-active');
-  });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('.tabs button').classList.add('tab-button-active');
-});
-
-
-document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
-  const selected = dropdown.querySelector('.custom-dropdown-selected');
-  const options = dropdown.querySelector('.custom-dropdown-options');
-  const hiddenInput = document.getElementById('hiddenSelector');
-
-  selected.addEventListener('click', () => {
-    options.style.display = options.style.display === 'block' ? 'none' : 'block';
-  });
-
-  options.querySelectorAll('[data-value]').forEach(option => {
-    option.addEventListener('click', () => {
-      const value = option.getAttribute('data-value');
-      selected.textContent = option.textContent;
-      hiddenInput.value = value;
-      options.style.display = 'none';
+      onSaveClick();
     });
   });
 
-  document.addEventListener('click', e => {
-    if (!dropdown.contains(e.target)) {
-      options.style.display = 'none';
-    }
-  });
-});
-
-
-document.querySelectorAll('.custom-dropdown-options div[data-value]').forEach(option => {
-  option.addEventListener('click', function () {
-    const selected = this.closest('.custom-dropdown').querySelector('.custom-dropdown-selected');
-    const selectedKey = selected.getAttribute('data-value');
-
-    const hiddenInput = document.querySelector(`input[type="hidden"][data-value="${selectedKey}"]`);
-
-    const value = this.getAttribute('data-value');
-    const text = this.textContent.trim();
-
-    if (hiddenInput) {
-      hiddenInput.value = value;
-    }
-
-    const img = this.querySelector('img');
-    if (img) {
-      const newImg = img.cloneNode(true);
-      selected.innerHTML = ''; 
-      selected.appendChild(newImg);
-      selected.append(' ' + text);
-    } else {
-      selected.textContent = text;
-    }
-  });
-});
-
-
-
-
-
-
-function selectDropdownValueByData(value) {
-  const option = document.querySelector(`.custom-dropdown-options div[data-value="${value}"]`);
-  if (!option) return;
-
-  const dropdown = option.closest('.custom-dropdown');
-  const selected = dropdown.querySelector('.custom-dropdown-selected');
-  const hiddenInput = document.getElementById('hiddenSelector');
-  const text = option.textContent.trim();
-
-  hiddenInput.value = value;
-
-  const img = option.querySelector('img');
-  if (img) {
-    const newImg = img.cloneNode(true);
-    selected.innerHTML = '';
-    selected.appendChild(newImg);
-    selected.append(' ' + text);
-  } else {
-    selected.textContent = text;
+  const container = document.querySelector('.container');
+  if (container) {
+    container.addEventListener('change', (event) => {
+      const target = event.target;
+      if (target.matches('input[type="checkbox"], input[type="text"], input[type="radio"]')) {
+        console.log(`Auto-saving layout state change on: #${target.id || 'Dynamic Entry'}`);
+        onSaveClick();
+      }
+    });
   }
 
-  dropdown.querySelector('.custom-dropdown-options').style.display = 'none';
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Some Fancy GUI stuff
+
+
+
+
+const themeToggle = document.getElementById('ThemeToggle');
+if (themeToggle) {
+
+  handleThemeChange(); 
+  
+  themeToggle.addEventListener('change', handleThemeChange);
 }
+
+function handleThemeChange() {
+  const themeToggle = document.getElementById('ThemeToggle');
+  if (themeToggle && themeToggle.checked) {
+    document.body.classList.add('light-theme');
+  } else {
+    document.body.classList.remove('light-theme');
+  }
+};
+
+
+
+
+
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  
+  const activeTab = document.getElementById(tabId);
+  if (activeTab) activeTab.classList.add('active');
+}
+
+function switchSubTab(subTabId) {
+  document.querySelectorAll('.sub-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+  
+  const targetSubTab = document.getElementById(subTabId);
+  if (targetSubTab) targetSubTab.classList.add('active');
+  
+  if (window.event && window.event.currentTarget) {
+    window.event.currentTarget.classList.add('active');
+  }
+}
+
+
+
+function initTooltipSystem() {
+  document.querySelectorAll('.info-tooltip-holder').forEach(holder => {
+    const box = holder.querySelector('.tooltip-box');
+    let hideTimeout;
+
+    holder.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      holder.classList.remove('left-snap', 'right-snap', 'top-snap', 'bottom-snap');
+
+      const rect = holder.getBoundingClientRect();
+      const container = holder.closest('.sidebar-content-view') || holder.closest('.tab');
+      if (!container) return;
+      
+      const containerRect = container.getBoundingClientRect();
+
+      // Horizontal checking
+      if ((rect.left - 110) < containerRect.left) holder.classList.add('left-snap');
+      else if ((rect.right + 110) > containerRect.right) holder.classList.add('right-snap');
+
+      // Vertical checking
+      if ((rect.top - 55) < containerRect.top) holder.classList.add('top-snap');
+      else if ((rect.bottom + 55) > containerRect.bottom) holder.classList.add('bottom-snap');
+
+      if (box) box.classList.add('visible');
+    });
+
+    holder.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        if (box) box.classList.remove('visible');
+        holder.classList.remove('left-snap', 'right-snap', 'top-snap', 'bottom-snap');
+      }, 200);
+    });
+  });
+}
+
+function initDropdownControllers() {
+  document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+    const selected = dropdown.querySelector('.custom-dropdown-selected');
+    const options = dropdown.querySelector('.custom-dropdown-options');
+    const hiddenInput = document.getElementById('hiddenSelector');
+
+    selected.addEventListener('click', () => {
+      options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    });
+
+    options.querySelectorAll('[data-value]').forEach(option => {
+      option.addEventListener('click', () => {
+        const value = option.getAttribute('data-value');
+        selected.textContent = option.textContent.trim();
+        if (hiddenInput) hiddenInput.value = value;
+        options.style.display = 'none';
+      });
+    });
+
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target)) options.style.display = 'none';
+    });
+  });
+}
+
+
+
+
+
+

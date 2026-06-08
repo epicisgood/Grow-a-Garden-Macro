@@ -569,10 +569,8 @@ ChangeCamera(type){
     }
     Sleep(150)
     
-    loop IniRead(settingsFile, "Settings", "RobloxGUI", 1) {
-        Send("{Down}")
-        Sleep(50)
-    }
+    Scroll_Until_CameraMode()
+
     HyperSleep(333)
     Send("{Right}")
     HyperSleep(333)
@@ -584,14 +582,38 @@ ChangeCamera(type){
 }
 
 
+Scroll_Until_CameraMode(){
+    
+    ActivateRoblox()
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    loop {
+        pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY "|" windowWidth "|" windowHeight)
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["Camera Mode"] , , , , , , 25) = 1) {
+            Gdip_DisposeImage(pBMScreen)
+            return 1
+        } else {
+            Send("{Down}")
+            Sleep(50)
+            Gdip_DisposeImage(pBMScreen)
+        }
 
-checkCamera(type){  
+        if A_Index == 25 {
+            PlayerStatus("CRITICAL ERROR!!! Please dm me this error!", "0xffe100",,true,,true)
+        }
+    }
+    
+}
+
+
+
+checkCamera(Camera_mode){  
     ActivateRoblox()
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
     loop 8 {
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY "|" windowWidth "|" windowHeight)
-        if (Gdip_ImageSearch(pBMScreen, bitmaps[type] , , , , , , 25) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[Camera_mode] , , , , , , 25) = 1) {
             Gdip_DisposeImage(pBMScreen)
             return 1
         } else {
@@ -1411,8 +1433,6 @@ ShowToolTip(){
     global LastShopTime
     global LastEggsTime
     global LastEasterSeedTime
-    ; global LastfallCosmeticsTime
-    global LastDevillishDecorTime
     global LastCreepyCrittersTime
     global LastMerchantTime
     global LastGearCraftingTime
@@ -1426,8 +1446,6 @@ ShowToolTip(){
     static GearsEnabled := IniRead(settingsFile, "Gears", "Gears") + 0
     static EggsEnabled := IniRead(settingsFile, "Eggs", "Eggs") + 0
     static EasterSeedEnabled := IniRead(settingsFile, "EasterSeed", "EasterSeed") + 0
-    ; static fallCosmeticsEnabled := IniRead(settingsFile, "fallCosmetics", "fallCosmetics") + 0
-    static DevillishDecorEnabled := IniRead(settingsFile, "DevillishDecor", "DevillishDecor") + 0
     static CreepyCrittersEnabled := IniRead(settingsFile, "CreepyCritters", "CreepyCritters") + 0
     static gearCraftingEnabled := IniRead(settingsFile, "GearCrafting", "GearCrafting") + 0
     static seedCraftingEnabled := IniRead(settingsFile, "SeedCrafting", "SeedCrafting") + 0
@@ -1455,16 +1473,6 @@ ShowToolTip(){
         static EasterSeedTime := 300
         EasterSeedRemaining := Max(0, EasterSeedTime - (currentTime - LastEasterSeedTime))
         tooltipText .= "EasterSeed: " (EasterSeedRemaining // 60) ":" Format("{:02}", Mod(EasterSeedRemaining, 60)) "`n"
-    }
-    ; if (fallCosmeticsEnabled) {
-    ;     static fallCosmeticsTime := 3600
-    ;     fallCosmeticsRemaining := Max(0, fallCosmeticsTime - (currentTime - LastfallCosmeticsTime))
-    ;     tooltipText .= "fallCosmetics: " (fallCosmeticsRemaining // 60) ":" Format("{:02}", Mod(fallCosmeticsRemaining, 60)) "`n"
-    ; }
-    if (DevillishDecorEnabled) {
-        static DevillishDecorTime := 3600
-        DevillishDecorRemaining := Max(0, DevillishDecorTime - (currentTime - LastDevillishDecorTime))
-        tooltipText .= "DevillishDecor: " (DevillishDecorRemaining // 60) ":" Format("{:02}", Mod(DevillishDecorRemaining, 60)) "`n"
     }
     if (CreepyCrittersEnabled) {
         static CreepyCrittersTime := 3600
@@ -1557,7 +1565,7 @@ CloseTokenGui(){
 }
 
 
-F3::
+F2::
 {
     ; ActivateRoblox()
     ; ResizeRoblox()
@@ -1640,27 +1648,6 @@ BuyEasterSeed(){
 }
 
 
-BuyDevillishDecor(){
-    if !(CheckSetting("DevillishDecor", "DevillishDecor")){
-        return 0
-    }
-    PlayerStatus("Going to DevillishDecor Shop!", "0x22e6a8",,false,,false)
-
-    searchItem("Event Lantern")
-    clickItem("Event Lantern", "Event Lantern")
-
-    Sleep(1500)
-    Walk(600, Skey)
-    Sleep(500)
-    Walk(1750, Akey)
-    Send("{" Ekey "}")
-    if !DetectShop("DevillishDecor"){
-        return 0 
-    }
-    buyShop(getItems("DevillishDecor"), "DevillishDecor")
-    CloseClutter()
-    return 1
-}
 
 BuyCreepyCritters(){
     if !(CheckSetting("CreepyCritters", "CreepyCritters")){
@@ -1685,19 +1672,6 @@ BuyCreepyCritters(){
     return 1
 }
 
-
-; BuyfallCosmetics(){
-;     if !(CheckSetting("fallCosmetics", "fallCosmetics")){
-;         return 0
-;     }
-;     PlayerStatus("Going to fallCosmetics Shop!", "0x22e6a8",,false,,false)
-;     if !DetectShop("fallCosmetics"){
-;         return 0 
-;     }
-;     buyShop(getItems("fallCosmetics"), "fallCosmetics")
-;     CloseClutter()
-;     return 1
-; }
 
 
 

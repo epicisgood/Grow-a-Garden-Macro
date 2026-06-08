@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.3.7"
+version := "v1.3.8"
 settingsFile := "settings.ini"
 
 
@@ -25,7 +25,8 @@ MyWindow.OnEvent("Close", (*) => StopMacro())
 MyWindow.AddHostObjectToScript("ButtonClick", { func: WebButtonClickEvent })
 MyWindow.AddHostObjectToScript("Save", { func: SaveSettings })
 MyWindow.AddHostObjectToScript("ReadSettings", { func: SendSettings })
-MyWindow.Show("w650 h450")
+
+MyWindow.Show("w600 h400")
 
 
 
@@ -33,7 +34,7 @@ F1::{
     Start
 }
 
-F2::{
+F3::{
     ResetMacro
 }
 
@@ -42,7 +43,7 @@ Alt & S:: {
 }
 
 Start(*) {
-    
+
     PlayerStatus("Starting " version " Grow A Garden Macro by epic", "0xFFFF00", , false, , false)
     OnError (e, mode) => (mode = "return") * (-1)
     Loop {
@@ -109,215 +110,90 @@ WebButtonClickEvent(button) {
     switch button {
         case "Start":
             Send("{F1}")
-        case "Stop":
+        case "Pause":
 			Send("{F2}")
+        case "Stop":
+			Send("{F3}")
 	}
 }
 
 
+
+global CORE_SETTINGS := ["url", "discordID", "VipLink", "Cosmetics", "TravelingMerchant", "CookingEvent", "SearchList", "CookingTime", "ThemeToggle"]
+global CATEGORIES    := ["Seeds", "Gears", "Eggs", "GearCrafting", "SeedCrafting", "EasterSeed", "CreepyCritters"]
 
 SaveSettings(settingsJson) {
     settings := JSON.Parse(settingsJson)
     IniFile := A_WorkingDir . "\settings.ini"
 
     for key, val in settings {
-        if (key == "url" || key == "discordID" || key == "VipLink" || key == "Cosmetics" || key == "TravelingMerchant" || key == "CookingEvent" || key == "SearchList" || key == "CookingTime" || key == "RobloxGUI") {
-            IniWrite(val, IniFile, "Settings", key)
-        }
-    }
-
-    sectionMap := Map(
-        "seedItems", "Seeds",
-        "gearItems", "Gears",
-        "EggItems",  "Eggs",
-        "GearCraftingItems", "GearCrafting",
-        "SeedCraftingItems", "SeedCrafting",
-        "EasterSeedItems", "EasterSeed",
-        ; "fallCosmeticsItems", "fallCosmetics",
-        "DevillishDecorItems", "DevillishDecor",
-        "CreepyCrittersItems", "CreepyCritters",
-    )
-
-    for groupName, sectionName in sectionMap {
-        if settings.Has(groupName) {
-            group := settings[groupName]
-            for itemName, isEnabled in group {
-                IniWrite(isEnabled ? 1 : 0, IniFile, sectionName, StrReplace(itemName, " ", ""))
+        for coreKey in CORE_SETTINGS {
+            if (key == coreKey) {
+                IniWrite(val, IniFile, "Settings", key)
+                break
             }
         }
     }
-    MsgBox("Saved settings.",,"T0.5")
+
+    if settings.Has("dynamicItems") {
+        for categoryName, items in settings["dynamicItems"] {
+            for itemName, isEnabled in items {
+                sanitizedKey := StrReplace(itemName, " ", "")
+                IniWrite(isEnabled ? 1 : 0, IniFile, categoryName, sanitizedKey)
+            }
+        }
+    }
+    ; MsgBox("Saved settings.",, "T0.5")
 }
 
-
-SendSettings(){
-	settingsFile := A_WorkingDir . "\settings.ini"
-    seedItems := getItems("Seeds")
-
-    gearItems := getItems("Gears")
-
-    EggItems := getItems("Eggs")
-
-    GearCraftingItems := getItems("GearCrafting")
+SendSettings() {
+    settingsFile := A_WorkingDir . "\settings.ini"
     
-    SeedCraftingItems := getItems("SeedCrafting")
-    
-    EasterSeedItems := getItems("EasterSeed")
-    ; fallCosmeticsItems := getItems("fallCosmetics")
-    DevillishDecorItems := getItems("DevillishDecor")
-    CreepyCrittersItems := getItems("CreepyCritters")
-
-    seedItems.Push("Seeds")
-    gearItems.Push("Gears")
-    EggItems.Push("Eggs")
-    GearCraftingItems.Push("GearCrafting")
-    SeedCraftingItems.Push("SeedCrafting")
-    EasterSeedItems.Push("EasterSeed")
-    ; fallCosmeticsItems.Push("fallCosmetics")
-    DevillishDecorItems.Push("DevillishDecor")
-    CreepyCrittersItems.Push("CreepyCritters")
-
-
     if (!FileExist(settingsFile)) {
-        IniWrite("", settingsFile, "Settings", "url")
-        IniWrite("", settingsFile, "Settings", "discordID")
-        IniWrite("", settingsFile, "Settings", "VipLink")
+        IniWrite("",  settingsFile, "Settings", "url")
+        IniWrite("",  settingsFile, "Settings", "discordID")
+        IniWrite("",  settingsFile, "Settings", "VipLink")
         IniWrite("0", settingsFile, "Settings", "Cosmetics")
         IniWrite("1", settingsFile, "Settings", "TravelingMerchant")
         IniWrite("0", settingsFile, "Settings", "CookingEvent")
-        IniWrite("", settingsFile, "Settings", "SearchList")
-        IniWrite("", settingsFile, "Settings", "CookingTime")
-        IniWrite("1", settingsFile, "Settings", "RobloxGUI")
-        for i in seedItems {
-            IniWrite("1", settingsFile, "Seeds", StrReplace(i, " ", ""))
-        }
-        for i in gearItems {
-            IniWrite("1", settingsFile, "Gears", StrReplace(i, " ", ""))
-        }
-        for i in EggItems {
-            IniWrite("1", settingsFile, "Eggs", StrReplace(i, " ", ""))
-        }
-        for i in GearCraftingItems {
-            IniWrite("0", settingsFile, "GearCrafting", StrReplace(i, " ", ""))
-        }
-        for i in SeedCraftingItems {
-            IniWrite("0", settingsFile, "SeedCrafting", StrReplace(i, " ", ""))
-        }
-        for i in EasterSeedItems {
-            IniWrite("0", settingsFile, "EasterSeed", StrReplace(i, " ", ""))
-        }
-        ; for i in fallCosmeticsItems {
-        ;     IniWrite("0", settingsFile, "fallCosmetics", StrReplace(i, " ", ""))
-        ; }
-        for i in DevillishDecorItems {
-            IniWrite("0", settingsFile, "DevillishDecor", StrReplace(i, " ", ""))
-        }
-        for i in CreepyCrittersItems {
-            IniWrite("0", settingsFile, "CreepyCritters", StrReplace(i, " ", ""))
+        IniWrite("",  settingsFile, "Settings", "SearchList")
+        IniWrite("",  settingsFile, "Settings", "CookingTime")
+        IniWrite("0", settingsFile, "Settings", "ThemeToggle")
+
+        for category in CATEGORIES {
+            defaultState := (category == "Seeds" || category == "Gears" || category == "Eggs") ? "1" : "0"
+            items := getItems(category)
+            items.Push(category)
+            
+            for item in items {
+                IniWrite(defaultState, settingsFile, category, StrReplace(item, " ", ""))
+            }
         }
         Sleep(200)
     }
 
-    Other := [
-        "TravelingMerchant",
-        "Cosmetics",
-        "CookingEvent"
-    ]
-
-    for item in Other {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "Settings", key, "0")
-        IniWrite(value, settingsFile, "Settings", key)
-    }
-    
-    SettingsJson := { 
-        url:       IniRead(settingsFile, "Settings", "url")
-      , discordID: IniRead(settingsFile, "Settings", "discordID")
-      , VipLink:   IniRead(settingsFile, "Settings", "VipLink")
-      , Cosmetics:  IniRead(settingsFile, "Settings", "Cosmetics")
-      , TravelingMerchant:  IniRead(settingsFile, "Settings", "TravelingMerchant")
-      , CookingEvent:  IniRead(settingsFile, "Settings", "CookingEvent")
-      , SearchList:  IniRead(settingsFile, "Settings", "SearchList")
-      , CookingTime:  IniRead(settingsFile, "Settings", "CookingTime")
-      , RobloxGUI:  IniRead(settingsFile, "Settings", "RobloxGUI")
-      , SeedItems: Map()
-      , GearItems: Map()
-      , EggItems:  Map()
-      , GearCraftingItems: Map()
-      , SeedCraftingItems: Map()
-      , EasterSeedItems: Map()
-    ;   , fallCosmeticsItems: Map()
-      , DevillishDecorItems: Map()
-      , CreepyCrittersItems: Map()
+    SettingsJson := {}
+    for key in CORE_SETTINGS {
+        SettingsJson.%key% := IniRead(settingsFile, "Settings", key, "")
     }
 
-    for item in seedItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "Seeds", key, "1")
-        IniWrite(value, settingsFile, "Seeds", key)
-        SettingsJson.SeedItems[item] := value
+    SettingsJson.dynamicItems := {}
+    for category in CATEGORIES {
+        SettingsJson.dynamicItems.%category% := Map()
+        
+        defaultVal := (category == "Seeds" || category == "Gears" || category == "Eggs") ? "1" : "0"
+        items := getItems(category)
+        items.Push(category)
+
+        for item in items {
+            sanitizedKey := StrReplace(item, " ", "")
+            val := IniRead(settingsFile, category, sanitizedKey, defaultVal)
+            SettingsJson.dynamicItems.%category%[item] := val
+        }
     }
 
-    for item in gearItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "Gears", key, "1")
-        IniWrite(value, settingsFile, "Gears", key)
-        SettingsJson.GearItems[item] := value
-    }
-
-    for item in EggItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "Eggs", key, "1")
-        IniWrite(value, settingsFile, "Eggs", key)
-        SettingsJson.EggItems[key] := value
-    }
-
-
-    for item in GearCraftingItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "GearCrafting", key, "0")
-        IniWrite(value, settingsFile, "GearCrafting", key)
-        SettingsJson.GearCraftingItems[key] := value
-    }
-
-    for item in SeedCraftingItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "SeedCrafting", key, "0")
-        IniWrite(value, settingsFile, "SeedCrafting", key)
-        SettingsJson.GearCraftingItems[key] := value
-    }
-
-    for item in EasterSeedItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "EasterSeed", key, "0")
-        IniWrite(value, settingsFile, "EasterSeed", key)
-        SettingsJson.EasterSeedItems[key] := value
-    }
-    ; for item in fallCosmeticsItems {
-    ;     key := StrReplace(item, " ", "")
-    ;     value := IniRead(settingsFile, "fallCosmetics", key, "0")
-    ;     IniWrite(value, settingsFile, "fallCosmetics", key)
-    ;     SettingsJson.fallCosmeticsItems[key] := value
-    ; }
-    for item in DevillishDecorItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "DevillishDecor", key, "0")
-        IniWrite(value, settingsFile, "DevillishDecor", key)
-        SettingsJson.DevillishDecorItems[key] := value
-    }
-    for item in CreepyCrittersItems {
-        key := StrReplace(item, " ", "")
-        value := IniRead(settingsFile, "CreepyCritters", key, "0")
-        IniWrite(value, settingsFile, "CreepyCritters", key)
-        SettingsJson.CreepyCrittersItems[key] := value
-    }
-
-
-	MyWindow.PostWebMessageAsJson(JSON.stringify(SettingsJson))
+    MyWindow.PostWebMessageAsJson(JSON.stringify(SettingsJson))
 }
-
-
-
 
 
 
