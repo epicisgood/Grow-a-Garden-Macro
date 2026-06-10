@@ -558,11 +558,12 @@ Clickbutton(button, clickit := 1){
     return 0
 }
 
+
 ChangeCamera(type){
     Send("{" EscKey "}")
-    HyperSleep(750)
-    Send("{Tab}")
-    HyperSleep(333)
+    HyperSleep(1000)
+    Open_Setting_Menu()
+    HyperSleep(500)
     loop 10 {
         Send("{Up}")
         Sleep(50)
@@ -581,6 +582,21 @@ ChangeCamera(type){
     HyperSleep(1000)
 }
 
+Open_Setting_Menu(){
+    ActivateRoblox()
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["SettingIcon"] , &OutputList, , , , , 25) = 1) {
+        Cords := StrSplit(OutputList, ",")
+        x := Cords[1] + windowX
+        y := Cords[2] + windowY + 30
+        MouseMove(x, y)
+        Sleep(300)
+        Click
+    }
+    Gdip_DisposeImage(pBMScreen)
+}
 
 Scroll_Until_CameraMode(){
     
@@ -594,11 +610,11 @@ Scroll_Until_CameraMode(){
             return 1
         } else {
             Send("{Down}")
-            Sleep(50)
+            Sleep(40)
             Gdip_DisposeImage(pBMScreen)
         }
 
-        if A_Index == 25 {
+        if A_Index == 35 {
             PlayerStatus("CRITICAL ERROR!!! Please dm me this error!", "0xffe100",,true,,true)
         }
     }
